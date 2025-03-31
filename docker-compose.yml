@@ -1,0 +1,138 @@
+name: box_buddy
+services:
+  postgres:
+    image: postgres:17.4
+    container_name: postgres
+    volumes:
+      - ./persist/postgres:/var/lib/postgresql/data
+    env_file:
+      - ./app/box_buddy/.env
+    labels:
+      - "traefik.enable=false"
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    container_name: mailpit
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailpit.rule=Host(`mail.localhost`)"
+      - "traefik.http.routers.mailpit.tls=true"
+      - traefik.http.services.mailpit.loadbalancer.server.port=8025
+    ports:
+      - "1025:1025"
+  redis:
+    image: docker.io/redis:7
+    container_name: redis
+    volumes:
+      - ./persist/redis:/data
+    labels:
+      - "traefik.enable=false"
+  traefik:
+    image: traefik:v3.3
+    command:
+      - "--providers.docker"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web-secure.address=:443"
+      - "--entrypoints.web.http.redirections.entryPoint.to=web-secure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--api=true"
+      - "--log.level=INFO"
+      - "--log.filePath=/etc/traefik/logs/traefik.log"
+      - "--accesslog=true"
+      - "--accesslog.filePath=/etc/traefik/logs/access.log"
+    container_name: traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./persist/logs/traefik:/etc/traefik/logs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=web-secure"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+  celery_worker:
+    container_name: celery_worker
+    build:
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        DEV: True
+    volumes:
+      - ./app:/app/src:z
+      - ./persist/static:/app/static
+      - ./persist/media:/app/media
+    env_file:
+      - ./app/box_buddy/.env
+    entrypoint: /bin/bash /app/run-worker.sh
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
+  celery_beat:
+    container_name: celery_beat
+    build:
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        DEV: True
+    volumes:
+      - ./app:/app/src:z
+      - ./persist/static:/app/static
+      - ./persist/media:/app/media
+    env_file:
+      - ./app/box_buddy/.env
+    entrypoint: /bin/bash /app/run-beats.sh
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
+  celery_flower:
+    container_name: celery_flower
+    build:
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        DEV: True
+    volumes:
+      - ./app:/app/src:z
+      - ./persist/static:/app/static
+      - ./persist/media:/app/media
+    env_file:
+      - ./app/box_buddy/.env
+    entrypoint: /bin/bash /app/run-flower.sh
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flower.rule=Host(`flower.localhost`)"
+      - "traefik.http.routers.flower.tls=true"
+      - traefik.http.services.flower.loadbalancer.server.port=5555
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
+  server:
+    container_name: server
+    build:
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        DEV: True
+    volumes:
+      - ./app:/app/src:z
+      - ./persist/static:/app/static
+      - ./persist/media:/app/media
+    env_file:
+      - ./app/box_buddy/.env
+    entrypoint: /bin/bash /app/run-server.sh
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host(`localhost`)"
+      - "traefik.http.routers.django.tls=true"
+      - traefik.http.services.django.loadbalancer.server.port=8000
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
