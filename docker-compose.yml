@@ -58,8 +58,6 @@ services:
     container_name: celery_worker
     build:
       dockerfile: ./docker/django/Dockerfile
-      args:
-        DEV: True
     volumes:
       - ./app:/app/src:z
       - ./persist/static:/app/static
@@ -77,8 +75,6 @@ services:
     container_name: celery_beat
     build:
       dockerfile: ./docker/django/Dockerfile
-      args:
-        DEV: True
     volumes:
       - ./app:/app/src:z
       - ./persist/static:/app/static
@@ -96,8 +92,6 @@ services:
     container_name: celery_flower
     build:
       dockerfile: ./docker/django/Dockerfile
-      args:
-        DEV: True
     volumes:
       - ./app:/app/src:z
       - ./persist/static:/app/static
@@ -118,8 +112,6 @@ services:
     container_name: server
     build:
       dockerfile: ./docker/django/Dockerfile
-      args:
-        DEV: True
     volumes:
       - ./app:/app/src:z
       - ./persist/static:/app/static

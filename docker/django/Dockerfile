@@ -1,49 +1,43 @@
-FROM python:3.12 AS base
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 
-ARG DEV
-ENV VIRTUAL_ENV=/app/.venv \
-    PATH="/app/.venv/bin:$PATH"
-
-# RUN apt update && \
-#     apt install libpq-dev
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
+ENV UV_PYTHON_DOWNLOADS=0
 
 
-FROM base AS builder
-
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache
-
-# RUN apt update && \
-#     apt install musl-dev build-base gcc gfortran openblas-dev
-
+# Install the project into `/app`
 WORKDIR /app
 
-# Install Poetry
-RUN pip install poetry==2.1.1
+# dependency resolution and caching
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=README.md,target=README.md \
+    uv sync --frozen --no-install-project 
+    #--no-dev
 
-# Install the app
-COPY pyproject.toml ./ 
+COPY ./app /app
+COPY docker/django/run-*.sh /app
 
-RUN if [ "${DEV}" = "true" ] ; \
-     then poetry install --with dev --no-root ; \
-     else poetry install --without dev --no-root ; \
-    fi
+# installs the dependencies after the application code is copied.
+RUN --mount=type=cache,target=/root/.cache/uv \
+--mount=type=bind,source=uv.lock,target=uv.lock \
+--mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+--mount=type=bind,source=README.md,target=README.md \
+    uv sync --frozen 
+    #--no-dev
 
-RUN rm -rf $POETRY_CACHE_DIR;
+
+FROM python:3.12-slim-bookworm
+COPY --from=builder --chown=app:app /app /app
 
 
-
-FROM base AS runtime
+ENV PATH="/app/.venv/bin:$PATH"
 
 RUN adduser django --home /home/django
 
-COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-COPY app /app/src
-COPY docker/django/run-*.sh /app
 
+# Create the static and media directories
 RUN mkdir /app/static
 RUN mkdir /app/media
 
@@ -52,4 +46,11 @@ RUN chown -R django /app
 
 WORKDIR /app/src
 USER django
+
+
+
+
+
+
+
 
