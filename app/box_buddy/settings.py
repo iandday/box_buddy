@@ -36,7 +36,6 @@ CSRF_COOKIE_SECURE = True
 # Application definition
 
 INSTALLED_APPS = [
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,19 +48,16 @@ INSTALLED_APPS = [
     "csp",
     "crispy_bootstrap5",
     'django_bootstrap5',
-
-
     "allauth",
     "allauth.account",
     "allauth.mfa",
     "allauth.socialaccount",
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.openid_connect',
- 
     "django_celery_beat",
     'debug_toolbar',
-        'box_buddy',
-           'users'
+    'box_buddy',
+    'users',
 
 ]
 
@@ -137,7 +133,7 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
@@ -190,12 +186,14 @@ CSP_INCLUDE_NONCE_IN = [
 # django-allauth
 # https://docs.allauth.org/en/latest/account/configuration.html
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+ACCOUNT_ALLOW_SOCIAL_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_SOCIAL_REGISTRATION", True)
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 ACCOUNT_FORMS = {"signup": "users.forms.UserSignupForm"}
+ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "users.adapters.SocialAccountAdapter"
 SOCIALACCOUNT_FORMS = {"signup": "users.forms.UserSocialSignupForm"}
 SOCIAL_PROVIDERS='allauth.socialaccount.providers.openid_connect'
@@ -209,8 +207,6 @@ SOCIALACCOUNT_PROVIDERS={
                 'secret': env.str('AUTHENTIK_CLIENT_SECRET'),
                 'settings': {
                     'server_url': env.str('AUTHENTIK_URL'), 
-                    #"token_auth_method": "client_secret_basic",
-                   # "oauth_pkce_enabled": True,
                 }
             }] 
         }

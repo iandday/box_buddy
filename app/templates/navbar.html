@@ -39,11 +39,12 @@
           </li>
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a
-              class="nav-link"
-              href="{% url 'users:detail' request.user.pk %}"
-              >{% translate "My Profile" %}</a
-            >
+            {% url 'account_email' as email_url_ %}
+            {% url 'socialaccount_connections' as socialaccount_url_ %}
+            {% if email_url_ or socialaccount_url_ %}
+                <a href="{% if email_url_ %}{{ email_url_ }}{% else %}{{ socialaccount_url_ }}{% endif %}"
+                   class="btn btn-secondary">Manage Account</a>
+            {% endif %}
           </li>
           <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}

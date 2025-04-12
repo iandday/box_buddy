@@ -1,39 +1,57 @@
-
-from typing import ClassVar
-
-from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField
-from django.db.models import EmailField
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-
-from .managers import UserManager
+from django.db import models
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
 
-class User(AbstractUser):
-    """
-    Default custom user model for Box Buddy.
-    If adding fields that need to be filled at user signup,
-    check forms.SignupForm and forms.SocialSignupForms accordingly.
-    """
+class MyCustomUserManager(BaseUserManager):
 
-    # First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
-    first_name = None  # type: ignore[assignment]
-    last_name = None  # type: ignore[assignment]
-    email = EmailField(_("email address"), unique=True)
-    username = None  # type: ignore[assignment]
+   def create_user(self, email, password=None):
+       if not email:
+           raise ValueError('Users must have an email address')
+      
+       user = self.model(
+           email=self.normalize_email(email),
+       )
+      
+       user.set_password(password)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+       user.save(using=self._db)
+       return user
 
-    objects: ClassVar[UserManager] = UserManager()
+   def create_superuser(self, email, password):
+       user = self.create_user(
+           email=email,
+           password=password,
+       )
+      
+       user.is_admin = True
+       user.is_staff = True
 
-    def get_absolute_url(self) -> str:
-        """Get URL for user's detail view.
+       user.save(using=self._db)
+       return user
+   
+class User(AbstractBaseUser):
+   email = models.EmailField(unique=True)
+   first_name = models.CharField(max_length=30, blank=True)
+   last_name = models.CharField(max_length=30, blank=True)
+   is_active = models.BooleanField(default=True)
+   is_admin = models.BooleanField(default=False)
+   timezone = models.CharField(max_length=30, default='UTC')
+   is_custom = models.BooleanField(default=False)
+   is_staff = models.BooleanField(default=False)
+   created_at = models.DateTimeField(auto_now_add=True)
+   updated_at = models.DateTimeField(auto_now=True)
 
-        Returns:
-            str: URL for user detail.
+   objects = MyCustomUserManager()
+   USERNAME_FIELD = 'email'
+   EMAIL_FIELD = 'email'
 
-        """
-        return reverse("users:detail", kwargs={"pk": self.id})
+   def __str__(self):
+       return self.email
+   def has_perm(self, perm, obj=None):
+       return True
+   def has_module_perms(self, app_label):
+       return True
+
+   @property
+   def is_utc(self):
+       return self.timezone == 'UTC'
