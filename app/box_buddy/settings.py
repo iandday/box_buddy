@@ -56,6 +56,14 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.openid_connect',
     "django_celery_beat",
     'debug_toolbar',
+    'health_check',                            
+    'health_check.db',                          
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.migrations',
+    'health_check.contrib.celery',              
+    'health_check.contrib.celery_ping',        
+    'health_check.contrib.redis',               
     'box_buddy',
     'users',
 
@@ -243,6 +251,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 # celery
+REDIS_URL = env.str('CELERY_REDIS')
 CELERY_BROKER_URL = env.str('CELERY_REDIS')
 CELERY_RESULT_BACKEND = env.str('CELERY_REDIS')
 CELERY_RESULT_EXTENDED = True

@@ -1,0 +1,8 @@
+README.me
+docker-compose.yml
+persist
+.vscode
+.venv
+.devcontainer
+app/box_buddy/.env
+app/box_buddy/.env.example
