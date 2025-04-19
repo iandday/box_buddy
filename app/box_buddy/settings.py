@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ
 import socket
+from pythonjsonlogger import jsonlogger
 
 env = environ.Env()
 env.read_env()
@@ -66,6 +67,7 @@ INSTALLED_APPS = [
     'health_check.contrib.redis',               
     'box_buddy',
     'users',
+    'core'
 
 ]
 
@@ -113,6 +115,31 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'json': {
+            '()': jsonlogger.JsonFormatter,
+            'format': '%(asctime)s %(levelname)s %(message)s %(module)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose' if env.bool('DEV') else 'json',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': env.str('DJANGO_LOG_LEVEL', 'INFO'),
+    },
+}
 
 # AUTHENTICATION
 

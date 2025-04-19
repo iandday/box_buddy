@@ -16,19 +16,17 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
-from django.views.generic import TemplateView
+from django.urls import include, path, re_path
+from core.views import home, about
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("health/", include("health_check.urls")),
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
+    path("", home, name="home"),
+    path("about/", about, name="about"
     ),
+
 ]
 
 if "debug_toolbar" in settings.INSTALLED_APPS:
