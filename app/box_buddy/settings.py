@@ -64,7 +64,9 @@ INSTALLED_APPS = [
     'health_check.contrib.migrations',
     'health_check.contrib.celery',              
     'health_check.contrib.celery_ping',        
-    'health_check.contrib.redis',               
+    'health_check.contrib.redis',     
+     "import_export",  # https://django-import-export.readthedocs.io/en/latest/
+    "simple_history",  # https://django-simple-history.readthedocs.io/en/latest/quick_start.html#install          
     'box_buddy',
     'users',
     'core'

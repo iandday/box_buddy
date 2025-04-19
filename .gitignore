@@ -21,6 +21,9 @@ persist/
 # Virtual environments
 venv/
 .env/
+.venv
+.mypy_cache/
+
 
 # IDEs and editors
 .vscode/
