@@ -1,0 +1,21 @@
+services:
+  celery_worker:
+    volumes:
+    - ./:/app:z
+    - ./persist/static:/app/static
+    - ./persist/media:/app/media
+  celery_beat:
+    volumes:
+    - ./:/app:z
+    - ./persist/static:/app/static
+    - ./persist/media:/app/media
+  celery_flower:
+    volumes:
+    - ./:/app:z
+    - ./persist/static:/app/static
+    - ./persist/media:/app/media
+  server:
+    volumes:
+    - ./:/app:z
+    - ./persist/static:/app/static
+    - ./persist/media:/app/media

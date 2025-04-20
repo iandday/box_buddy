@@ -57,22 +57,6 @@ services:
     container_name: celery_worker
     build:
       dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: ./
-          target: /app
-          ignore:
-            - .venv/
-            - persist
-            - README.me
-            - docker-compose.yml
-            - .vscode
-            - .devcontainer
-            - app/box_buddy/.env
-            - app/box_buddy/.env.example
-        - action: rebuild
-          path: ./uv.lock
     volumes:
       - ./persist/static:/app/static
       - ./persist/media:/app/media
@@ -95,22 +79,6 @@ services:
     container_name: celery_beat
     build:
       dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: ./
-          target: /app
-          ignore:
-            - .venv/
-            - persist
-            - README.me
-            - docker-compose.yml
-            - .vscode
-            - .devcontainer
-            - app/box_buddy/.env
-            - app/box_buddy/.env.example
-        - action: rebuild
-          path: ./uv.lock
     volumes:
       - ./persist/static:/app/static
       - ./persist/media:/app/media
@@ -133,22 +101,6 @@ services:
     container_name: celery_flower
     build:
       dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: ./
-          target: /app
-          ignore:
-            - .venv/
-            - persist
-            - README.me
-            - docker-compose.yml
-            - .vscode
-            - .devcontainer
-            - app/box_buddy/.env
-            - app/box_buddy/.env.example
-        - action: rebuild
-          path: ./uv.lock
     volumes:
       - ./persist/static:/app/static
       - ./persist/media:/app/media
@@ -176,23 +128,8 @@ services:
     container_name: server
     build:
       dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: ./
-          target: /app
-          ignore:
-            - .venv/
-            - persist
-            - README.me
-            - docker-compose.yml
-            - .vscode
-            - .devcontainer
-            - app/box_buddy/.env
-            - app/box_buddy/.env.example
-        - action: rebuild
-          path: ./uv.lock
     volumes:
+
       - ./persist/static:/app/static
       - ./persist/media:/app/media
     environment:
