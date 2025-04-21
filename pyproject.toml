@@ -50,30 +50,32 @@ build-backend = "hatchling.build"
 dev-dependencies = [
   "mypy>=1.2.0",
   "ruff==0.11.5",
-  "django-debug-toolbar==5.1.0" , # https://github.com/jazzband/django-debug-toolbar
-  "django-extensions==4.1",  # https://github.com/django-extensions/django-extensions #generate model.png
-  "django-coverage-plugin==3.1.0",  # https://github.com/nedbat/django_coverage_plugin
-  "pytest-django==4.11.1",  # https://github.com/pytest-dev/pytest-django
-  "watchfiles==1.0.5",  # https://github.com/samuelcolvin/watchfiles
-  "factory-boy==3.3.2",  # https://github.com/FactoryBoy/factory_boy https://medium.com/analytics-vidhya/factoryboy-usage-cd0398fd11d2
+  "django-debug-toolbar==5.1.0", # https://github.com/jazzband/django-debug-toolbar
+  "django-extensions==4.1", # https://github.com/django-extensions/django-extensions #generate model.png
+  "django-coverage-plugin==3.1.0", # https://github.com/nedbat/django_coverage_plugin
+  "pytest-django==4.11.1", # https://github.com/pytest-dev/pytest-django
+  "watchfiles==1.0.5", # https://github.com/samuelcolvin/watchfiles
+  "factory-boy==3.3.2", # https://github.com/FactoryBoy/factory_boy https://medium.com/analytics-vidhya/factoryboy-usage-cd0398fd11d2
+  "pre-commit>=4.2.0",
+  "django-stubs[compatible-mypy]>=5.1.3",
+  "types-django-import-export>=4.3.0.20250218",
 ]
 
 
 [tool.mypy]
-python_version = "3.12"
-check_untyped_defs = true
-ignore_missing_imports = true
-warn_unused_ignores = true
-warn_redundant_casts = true
-warn_unused_configs = true
+python_executable = ".venv/bin/python"
 plugins = [
     "mypy_django_plugin.main",
 ]
+disable_error_code = ["import-untyped"]
 
-[tool.mypy.overrides]
+[[tool.mypy.overrides]]
 # Django migrations should not produce any errors:
 module = "*.migrations.*"
 ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "box_buddy.settings"
 
 [tool.coverage.run]
 include = ["box_buddy/**"]
@@ -83,49 +85,9 @@ plugins = ["django_coverage_plugin"]
 [tool.coverage.django_coverage_plugin]
 template_extensions = 'html, txt, tex, email'
 
-
-
-
-#####
-
-# ==== pytest ====
-[tool.pytest.ini_options]
-minversion = "6.0"
-addopts = "--ds=config.settings.test --reuse-db --import-mode=importlib"
-python_files = [
-    "tests.py",
-    "test_*.py",
-]
-
-# ==== Coverage ====
-
-
-# ==== mypy ====
-
-[tool.django-stubs]
-django_settings_module = "config.settings.test"
-
-# ==== djLint ====
-[tool.djlint]
-blank_line_after_tag = "load,extends"
-close_void_tags = true
-format_css = true
-format_js = true
-# TODO: remove T002 when fixed https://github.com/djlint/djLint/issues/687
-ignore = "H006,H030,H031,T002"
-include = "H017,H035"
-indent = 2
-max_line_length = 119
-profile = "django"
-
-[tool.djlint.css]
-indent_size = 2
-
-[tool.djlint.js]
-indent_size = 2
-
 [tool.ruff]
 target-version = "py312"
+line-length = 120
 # Exclude a variety of commonly ignored directories.
 extend-exclude = [
     "*/migrations/*.py",
@@ -142,7 +104,6 @@ select = [
   "N",
   "UP",
   "YTT",
-  # "ANN", # flake8-annotations: we should support this in the future but 100+ errors atm
   "ASYNC",
   "S",
   "BLE",
@@ -174,7 +135,6 @@ select = [
   "TID",
   "TC",
   "INT",
-  # "ARG", # Unused function argument
   "PTH",
   "ERA",
   "PD",
@@ -182,14 +142,12 @@ select = [
   "PL",
   "TRY",
   "FLY",
-  # "NPY",
-  # "AIR",
   "PERF",
-  # "FURB",
-  # "LOG",
   "RUF",
 ]
 ignore = [
+  "TRY003",
+  "EM101",
   "S101", # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "SIM102", # sometimes it's better to nest
@@ -206,3 +164,38 @@ extend-unsafe-fixes = [
 
 [tool.ruff.lint.isort]
 force-single-line = true
+
+
+#####
+
+# ==== pytest ====
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--ds=config.settings.test --reuse-db --import-mode=importlib"
+python_files = [
+    "tests.py",
+    "test_*.py",
+]
+
+
+
+
+
+# ==== djLint ====
+[tool.djlint]
+blank_line_after_tag = "load,extends"
+close_void_tags = true
+format_css = true
+format_js = true
+# TODO: remove T002 when fixed https://github.com/djlint/djLint/issues/687
+ignore = "H006,H030,H031,T002"
+include = "H017,H035"
+indent = 2
+max_line_length = 119
+profile = "django"
+
+[tool.djlint.css]
+indent_size = 2
+
+[tool.djlint.js]
+indent_size = 2

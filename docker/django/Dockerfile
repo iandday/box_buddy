@@ -3,7 +3,7 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=never \
-    UV_PYTHON=python3.12 
+    UV_PYTHON=python3.12
 
 
 RUN apt-get update && \
@@ -18,7 +18,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     --mount=type=bind,source=README.md,target=README.md \
-    uv sync --locked --no-install-project 
+    uv sync --locked --no-install-project
     #--no-dev
 
 COPY . /app
@@ -42,13 +42,7 @@ RUN mkdir /app_media
 RUN chmod a+x /app/docker/django/entrypoint.sh
 RUN chown django -R /app*
 
-WORKDIR /app/app
+WORKDIR /app
 USER django
 
 ENTRYPOINT ["/bin/bash", "/app/docker/django/entrypoint.sh"]
-
-
-
-
-
-
