@@ -166,28 +166,21 @@ extend-unsafe-fixes = [
 force-single-line = true
 
 
-#####
-
-# ==== pytest ====
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--ds=config.settings.test --reuse-db --import-mode=importlib"
+addopts = "--ds=box_buddy.settings --reuse-db --import-mode=importlib"
 python_files = [
     "tests.py",
     "test_*.py",
 ]
+DJANGO_SETTINGS_MODULE = "box_buddy.settings"
 
 
-
-
-
-# ==== djLint ====
 [tool.djlint]
 blank_line_after_tag = "load,extends"
 close_void_tags = true
 format_css = true
 format_js = true
-# TODO: remove T002 when fixed https://github.com/djlint/djLint/issues/687
 ignore = "H006,H030,H031,T002"
 include = "H017,H035"
 indent = 2

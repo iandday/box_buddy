@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import socket
 from pathlib import Path
 
-import environ  # type: ignore[import-untyped]
-from pythonjsonlogger.jsonlogger import JsonFormatter  # type: ignore[attr-defined]
+import environ
+from pythonjsonlogger.json import JsonFormatter
 
 env = environ.Env()
 env.read_env()

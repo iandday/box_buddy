@@ -44,7 +44,6 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    timezone = models.CharField(max_length=30, default="UTC")
     is_custom = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -62,7 +61,3 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label) -> bool:
         return True
-
-    @property
-    def is_utc(self) -> bool:
-        return self.timezone == "UTC"
