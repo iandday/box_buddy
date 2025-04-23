@@ -33,4 +33,4 @@ markdown_extensions:
 nav:
   - About: index.md
   - Development:
-      - General: dev.md
+      - General: dev_general.md
