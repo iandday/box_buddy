@@ -26,7 +26,8 @@
         "GitHub.copilot",
         "GitHub.copilot-chat",
         "charliermarsh.ruff",
-        "ms-python.mypy-type-checker"
+        "ms-python.mypy-type-checker",
+        "vivaxy.vscode-conventional-commits"
       ]
     }
   }

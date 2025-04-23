@@ -59,11 +59,12 @@ dev-dependencies = [
   "pre-commit>=4.2.0",
   "django-stubs[compatible-mypy]>=5.1.3",
   "types-django-import-export>=4.3.0.20250218",
+  "djlint>=1.36.4",
 ]
 
 
 [tool.mypy]
-python_executable = ".venv/bin/python"
+python_executable = "/app_env/bin/python"
 plugins = [
     "mypy_django_plugin.main",
 ]

@@ -58,8 +58,8 @@ services:
     build:
       dockerfile: ./docker/django/Dockerfile
     volumes:
-      - ./persist/static:/app/static
-      - ./persist/media:/app/media
+      - ./persist/static:/app_static
+      - ./persist/media:/app_media
     environment:
       - CONTAINER_ROLE=worker
     env_file:
@@ -80,8 +80,8 @@ services:
     build:
       dockerfile: ./docker/django/Dockerfile
     volumes:
-      - ./persist/static:/app/static
-      - ./persist/media:/app/media
+      - ./persist/static:/app_static
+      - ./persist/media:/app_media
     environment:
       - CONTAINER_ROLE=beats
     env_file:
@@ -102,8 +102,8 @@ services:
     build:
       dockerfile: ./docker/django/Dockerfile
     volumes:
-      - ./persist/static:/app/static
-      - ./persist/media:/app/media
+      - ./persist/static:/app_static
+      - ./persist/media:/app_media
     environment:
       - CONTAINER_ROLE=flower
     env_file:
@@ -129,9 +129,8 @@ services:
     build:
       dockerfile: ./docker/django/Dockerfile
     volumes:
-
-      - ./persist/static:/app/static
-      - ./persist/media:/app/media
+      - ./persist/static:/app_static
+      - ./persist/media:/app_media
     environment:
       - CONTAINER_ROLE=server
     env_file:
