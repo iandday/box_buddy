@@ -5,9 +5,9 @@ on:
       - main
 permissions:
   contents: write
-defaults:
-  run:
-    working-directory: ./scripts
+# defaults:
+#   run:
+#     working-directory: ./scripts
 jobs:
   deployDocs:
     runs-on: ubuntu-latest
