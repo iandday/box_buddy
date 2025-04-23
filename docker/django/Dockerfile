@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     --mount=type=bind,source=README.md,target=README.md \
-    uv sync --locked --no-install-project
+    uv sync --locked --no-install-project --all-groups
     #--no-dev
 
 COPY . /app
@@ -29,7 +29,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 --mount=type=bind,source=uv.lock,target=uv.lock \
 --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
 --mount=type=bind,source=README.md,target=README.md \
-    uv sync --locked
+    uv sync --locked --all-groups
     #--no-dev
 
 ENV PATH="/app_env/bin:$PATH"
