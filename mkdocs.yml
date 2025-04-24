@@ -31,6 +31,10 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
 nav:
-  - About: index.md
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting_started/installation.md
+      - Configuration: getting_started/configuration.md
+      - Usage: getting_started/usage.md
   - Development:
       - General: dev_general.md
