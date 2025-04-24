@@ -1,10 +1,11 @@
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![project_license][license-shield]][license-url]
-[![Actions status](https://github.com/iandday/box_buddy/workflows/mkdocs/badge.svg)](https://github.com/iandday/box_buddy/actions)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/iandday/box_buddy)
+![GitHub forks](https://img.shields.io/github/forks/iandday/box_buddy?style=flat-square)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fiandday%2Fbox_buddy%2Fmain%2Fpyproject.toml)
+![GitHub License](https://img.shields.io/github/license/iandday/box_buddy)
+![GitHub contributors](https://img.shields.io/github/contributors/iandday/box_buddy)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/iandday/box_buddy/mkdocs.yml?branch=main&label=Documentation)
+
 
 <br />
 <div align="center">
@@ -133,19 +134,5 @@ Distributed under the GNU General Public License. See `LICENSE.md` for more info
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/iandday/box_buddy.svg?style=for-the-badge
-[contributors-url]: https://github.com/iandday/box_buddy/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/iandday/box_buddy.svg?style=for-the-badge
-[forks-url]: https://github.com/iandday/box_buddy/network/members
-[stars-shield]: https://img.shields.io/github/stars/iandday/box_buddy.svg?style=for-the-badge
-[stars-url]: https://github.com/iandday/box_buddy/stargazers
-[issues-shield]: https://img.shields.io/github/issues/iandday/box_buddy.svg?style=for-the-badge
-[issues-url]: https://github.com/iandday/box_buddy/issues
-[license-shield]: https://img.shields.io/github/license/iandday/box_buddy.svg?style=for-the-badge
-[license-url]: https://github.com/iandday/box_buddy/blob/master/LICENSE.md
 
 [product-screenshot]: images/screenshot.png
