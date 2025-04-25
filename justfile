@@ -18,8 +18,8 @@ lint:
 
 # Format code using Black
 format:
-    @echo "Formatting code with Black..."
-    black .
+    @echo "Formatting code with Ruff"
+    uv run ruff format
 
 # Build the Docker image
 docker-build:

@@ -90,7 +90,6 @@ template_extensions = 'html, txt, tex, email'
 [tool.ruff]
 target-version = "py312"
 line-length = 120
-# Exclude a variety of commonly ignored directories.
 extend-exclude = [
     "*/migrations/*.py",
     "staticfiles/*",
@@ -153,6 +152,7 @@ ignore = [
   "S101", # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "SIM102", # sometimes it's better to nest
+  "COM812",
   "UP038", # Checks for uses of isinstance/issubclass that take a tuple
           # of types for comparison.
           # Deactivated because it can make the code slow:
