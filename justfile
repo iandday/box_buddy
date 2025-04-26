@@ -1,6 +1,22 @@
 # Set the default shell for commands
 set shell := ["bash", "-c"]
 
+# view rendered mkdocs
+mkdocs:
+    uv run mkdocs serve
+
+# Run linting using Ruff
+lint:
+    @echo "Running Ruff linter..."
+    uv run ruff check .
+
+# Format code using Black
+format:
+    @echo "Formatting code with Ruff"
+    uv run ruff format
+
+#------
+
 # Run the Django development server
 dev:
     @echo "Starting the Django development server..."
@@ -10,16 +26,6 @@ dev:
 test:
     @echo "Running tests..."
     pytest
-
-# Run linting using Ruff
-lint:
-    @echo "Running Ruff linter..."
-    ruff check .
-
-# Format code using Black
-format:
-    @echo "Formatting code with Ruff"
-    uv run ruff format
 
 # Build the Docker image
 docker-build:

@@ -23,6 +23,7 @@ dependencies = [
   "django-model-utils (==5.0.0)", # https://github.com/jazzband/django-model-utils
   "django-redis (==5.4.0)", # https://github.com/jazzband/django-redis
   "django-simple-history>=3.8.0",
+  "faker>=37.1.0",
   "flower>=2.0.1", # https://github.com/mher/flower
   "gunicorn (>=23.0.0,<23.1)",
   "hiredis (==3.1.0)", # https://github.com/redis/hiredis-py

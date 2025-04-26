@@ -131,7 +131,7 @@ LOGGING = {
     },
     "handlers": {
         "console": {
-            "level": "DEBUG",
+            "level": env.str("DJANGO_LOG_LEVEL", "INFO"),
             "class": "logging.StreamHandler",
             "formatter": "verbose" if env.bool("DEV") else "json",
         },

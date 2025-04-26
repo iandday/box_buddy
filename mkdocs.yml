@@ -2,7 +2,7 @@ site_name: Box Buddy
 site_dir: box_buddy/static/docs
 use_directory_urls: false
 
-site_url:
+#site_url:
 theme:
   name: material
   palette:
@@ -12,10 +12,10 @@ theme:
     - content.code.select
 plugins:
   - mkdocstrings:
-      default_handler: python
-      handlers:
-        pythone:
-          paths: [app]
+      #default_handler: python
+      #handlers:
+      #  python:
+      #    paths: [core]
   - glightbox
 markdown_extensions:
   - pymdownx.highlight:
@@ -38,3 +38,4 @@ nav:
       - Usage: getting_started/usage.md
   - Development:
       - General: dev_general.md
+      - Data Models: dev_models.md
