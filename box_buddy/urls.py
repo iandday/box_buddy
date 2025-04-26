@@ -20,19 +20,11 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path
 
-from core.views import about
-from core.views import home
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("health/", include("health_check.urls")),
-    path("", home, name="home"),
-    path(
-        "about/",
-        about,
-        name="about",
-    ),
+    path("", include("core.urls")),
 ]
 
 if "debug_toolbar" in settings.INSTALLED_APPS:

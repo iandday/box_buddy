@@ -41,10 +41,9 @@ elif [[ ${CONTAINER_ROLE} == "flower" ]]; then
             --basic_auth="${CELERY_FLOWER_USER}:${CELERY_FLOWER_PASSWORD}"
 elif [[ ${CONTAINER_ROLE} == "server" ]]; then
     if [[ ${DEV} == "True" ]]; then
-        uv run /app/manage.py runserver_plus 0.0.0.0:8000
+        uv run gunicorn --bind 0.0.0.0:8000 box_buddy.wsgi:application --reload
     else
-        uv run -c /app/gunicorn_conf.py box_buddy.wsgi
-
+        uv run gunicorn --bind 0.0.0.0:8000 box_buddy.wsgi:application
     fi
 else
     echo "Unknown CONTAINER_ROLE: ${CONTAINER_ROLE}"

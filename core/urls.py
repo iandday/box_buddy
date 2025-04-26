@@ -1,13 +1,13 @@
 from django.urls import path
-from django.views.generic import TemplateView
 
 from . import views
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
+    path("about", views.about, name="about"),
+    path("location/", views.location_list, name="location_list"),
+    path("location/view/<slug:slug>/", views.location_detail, name="location_detail"),
+    path("location/create", views.location_list, name="location_create"),
+    path("location/edit/<slug:slug>/", views.location_list, name="location_edit"),
+    path("location/delete/<slug:slug>/", views.location_list, name="location_delete"),
 ]

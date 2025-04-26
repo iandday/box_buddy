@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h2>{{ location.name }}</h2>
+      </div>
+      <div class="card-body">
+        <p>
+          <strong>Description:</strong> {{ location.description }}
+        </p>
+        <p>
+          <strong>Created By:</strong> {{ location.created_by }}
+        </p>
+        <p>
+          <strong>Created At:</strong> {{ location.created_at|date:'F j, Y, g:i a' }}
+        </p>
+        <p>
+          <strong>Last Updated By:</strong> {{ location.updated_by }}
+        </p>
+        <p>
+          <strong>Last Updated At:</strong> {{ location.updated_at|date:'F j, Y, g:i a' }}
+        </p>
+        <p>
+          <strong>Active:</strong> {{ location.is_active|yesno:'Yes,No' }}
+        </p>
+        <p>
+          <strong>Deleted:</strong> {{ location.is_deleted|yesno:'Yes,No' }}
+        </p>
+      </div>
+      <div class="card-footer text-end"></div>
+      <a href="{% url 'location_edit' location.slug %}"
+         class="btn btn-warning">Edit</a>
+      <a href="{% url 'location_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+  </div>
+{% endblock content %}

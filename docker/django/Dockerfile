@@ -6,7 +6,6 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_PYTHON=python3.12 \
     UV_PROJECT_ENVIRONMENT=/app_env
 
-
 RUN apt-get update && \
     apt-get install -y curl git && \
     apt-get clean && \
