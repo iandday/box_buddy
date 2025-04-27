@@ -82,8 +82,16 @@ Box Buddy is designed to keep track of storage box contents, maintaining a paren
 
 ## Roadmap
 
-- [ ] Data Model
-- [ ] User Interface
+- [x] Data Models
+- [x] Location List View
+- [x] Location Detail View
+- [x] Location Edit View
+- [ ] Box List View
+- [ ] Box Detail View
+- [ ] Box Edit View
+- [ ] Item List View
+- [ ] Item Detail View
+- [ ] Item Edit View
 - [ ] API
 - [ ] Data Import/Export
 

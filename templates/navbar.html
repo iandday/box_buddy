@@ -1,89 +1,83 @@
-{% load static i18n %} {% get_current_language as LANGUAGE_CODE %}
+{% load static i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
 <div class="mb-1 bg-secondary">
   <nav class="navbar navbar-expand-md ">
     <div class="container-fluid">
-      <button
-        class="navbar-toggler navbar-toggler-right"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler navbar-toggler-right"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a
-        class="navbar-brand"
-        href="{% url 'home' %}"
-        >Box Buddy</a
-      >
-      <div
-        class="collapse navbar-collapse"
-        id="navbarSupportedContent"
-      >
+      <a class="navbar-brand" href="{% url 'home' %}">Box Buddy</a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a
-              class="nav-link"
-              href="{% url 'home' %}"
-              >Home <span class="visually-hidden">(current)</span></a
-            >
+            <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a
-              class="nav-link"
-              href="{% url 'about' %}"
-              >About</a
-            >
+            <a class="nav-link" href="{% url 'about' %}">About</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="#"
+               role="button"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">Inventory</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="{% url 'location_list' %}">Locations</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Boxes</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Items</a>
+              </li>
+            </ul>
           </li>
           {% if request.user.is_authenticated %}
-          <li class="nav-item">
-            {% url 'account_email' as email_url_ %}
-            {% url 'socialaccount_connections' as socialaccount_url_ %}
-            {% if email_url_ or socialaccount_url_ %}
+            <li class="nav-item">
+              {% url 'account_email' as email_url_ %}
+              {% url 'socialaccount_connections' as socialaccount_url_ %}
+              {% if email_url_ or socialaccount_url_ %}
                 <a href="{% if email_url_ %}{{ email_url_ }}{% else %}{{ socialaccount_url_ }}{% endif %}"
                    class="btn btn-secondary">Manage Account</a>
+              {% endif %}
+            </li>
+            <li class="nav-item">
+              {# URL provided by django-allauth/account/urls.py #}
+              <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
+            </li>
+          {% else %}
+            {% if ACCOUNT_ALLOW_REGISTRATION %}
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+              </li>
             {% endif %}
-          </li>
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a
-              class="nav-link"
-              href="{% url 'account_logout' %}"
-              >{% translate "Sign Out" %}</a
-            >
-          </li>
-          {% else %} {% if ACCOUNT_ALLOW_REGISTRATION %}
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a
-              id="sign-up-link"
-              class="nav-link"
-              href="{% url 'account_signup' %}"
-              >{% translate "Sign Up" %}</a
-            >
-          </li>
+            <li class="nav-item">
+              {# URL provided by django-allauth/account/urls.py #}
+              <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
+            </li>
           {% endif %}
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a
-              id="log-in-link"
-              class="nav-link"
-              href="{% url 'account_login' %}"
-              >{% translate "Sign In" %}</a
-            >
-          </li>
-          {% endif %}
-
         </ul>
-
       </div>
       <div>
-        <li class="nav-item align-items-center d-flex" >
+        <li class="nav-item align-items-center d-flex">
           <i class="bi bi-brightness-high-fill"></i>
           <div class="ms-2 form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch" />
+            <input class="form-check-input"
+                   type="checkbox"
+                   role="switch"
+                   id="darkModeSwitch" />
           </div>
           <i class="bi bi-moon"></i>
         </li>

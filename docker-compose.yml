@@ -169,7 +169,7 @@ services:
       dockerfile: ./docker/django/Dockerfile
     develop:
       watch:
-        - action: sync
+        - action: sync+restart
           path: .
           target: /app
           ignore:
