@@ -2,20 +2,20 @@ services:
   celery_worker:
     volumes:
     - ./:/app
-    - ./persist/static:/app_static
-    - ./persist/media:/app_media
+    - static:/app_static
+    - media:/app_media
   celery_beat:
     volumes:
     - ./:/app
-    - ./persist/static:/app_static
-    - ./persist/media:/app_media
+    - static:/app_static
+    - media:/app_media
   celery_flower:
     volumes:
     - ./:/app
-    - ./persist/static:/app_static
-    - ./persist/media:/app_media
+    - static:/app_static
+    - media:/app_media
   server:
     volumes:
     - ./:/app
-    - ./persist/static:/app_static
-    - ./persist/media:/app_media
+    - static:/app_static
+    - media:/app_media

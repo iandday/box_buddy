@@ -46,8 +46,8 @@ INSTALLED_APPS = [
     "django_extensions",
     "django.forms",
     "crispy_forms",
+    "crispy_bootstrap5",  # https://github.com/django-crispy-forms/crispy-bootstrap5
     "csp",
-    "crispy_bootstrap5",
     "django_bootstrap5",
     "allauth",
     "allauth.account",

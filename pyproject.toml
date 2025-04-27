@@ -10,12 +10,11 @@ requires-python = ">=3.12,<4"
 dependencies = [
   "argon2-cffi (==23.1.0)", # https://github.com/hynek/argon2_cffi
   "celery (==5.4.0)", # pyup: < 6.0  # https://github.com/celery/celery
-  "crispy-bootstrap5 (==2024.10)", # https://github.com/django-crispy-forms/crispy-bootstrap5
+  "crispy-bootstrap5==2024.10", # https://github.com/django-crispy-forms/crispy-bootstrap5
   "Django (>=5.1.6,<5.2)",
   "django-allauth[socialaccount,mfa,openid] (==65.5.0)", # https://github.com/pennersr/django-allauth
   "django-bootstrap5 (==25.1)", #https://github.com/zostera/django-bootstrap5/tree/main
   "django-celery-beat (==2.7.0)", # https://github.com/celery/django-celery-beat
-  "django-crispy-forms (==2.3)", # https://github.com/django-crispy-forms/django-crispy-forms
   "django-csp (==3.8)", #https://github.com/mozilla/django-csp?tab=readme-ov-file
   "django-environ (>=0.12.0,<0.13)",
   "django-health-check>=3.18.3",

@@ -57,6 +57,15 @@ services:
     container_name: celery_worker
     build:
       dockerfile: ./docker/django/Dockerfile
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - .venv/
+        - action: rebuild
+          path: ./uv.lock
     volumes:
       - ./persist/static:/app_static
       - ./persist/media:/app_media
@@ -79,6 +88,15 @@ services:
     container_name: celery_beat
     build:
       dockerfile: ./docker/django/Dockerfile
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - .venv/
+        - action: rebuild
+          path: ./uv.lock
     volumes:
       - ./persist/static:/app_static
       - ./persist/media:/app_media
@@ -101,6 +119,15 @@ services:
     container_name: celery_flower
     build:
       dockerfile: ./docker/django/Dockerfile
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - .venv/
+        - action: rebuild
+          path: ./uv.lock
     volumes:
       - ./persist/static:/app_static
       - ./persist/media:/app_media
@@ -128,11 +155,21 @@ services:
     container_name: server
     build:
       dockerfile: ./docker/django/Dockerfile
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - .venv/
+        - action: rebuild
+          path: ./uv.lock
     volumes:
       - ./persist/static:/app_static
       - ./persist/media:/app_media
     environment:
       - CONTAINER_ROLE=server
+      - CHOKIDAR_USEPOLLING=1
     env_file:
       - ./box_buddy/.env
     healthcheck:

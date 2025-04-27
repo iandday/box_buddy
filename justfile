@@ -1,6 +1,14 @@
 # Set the default shell for commands
 set shell := ["bash", "-c"]
 
+
+up:
+    docker compose up --watch
+
+rebuild:
+    @echo "Rebuilding the Docker containers..."
+    docker compose up --watch rebuild
+
 # view rendered mkdocs
 mkdocs:
     uv run mkdocs serve

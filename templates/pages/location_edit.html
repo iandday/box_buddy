@@ -11,8 +11,7 @@
       <div class="card-body">
         <form method="post">
           {% csrf_token %}
-          {{ form|crispy }}
-          <a href="{% url 'location_list' %}" class="btn btn-secondary mt-3">Cancel</a>
+          {% crispy form %}
         </form>
       </div>
     </div>

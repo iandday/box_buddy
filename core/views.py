@@ -1,23 +1,41 @@
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
-from django.template.response import TemplateResponse
 
+from core.forms import LocationForm
 from core.models import Location
 
 
-def home(request) -> TemplateResponse:
-    return TemplateResponse(request, "pages/home.html", {})
+def home(request) -> HttpResponse:
+    return render(request, "pages/home.html", {})
 
 
-def about(request) -> TemplateResponse:
-    return TemplateResponse(request, "pages/about.html", {})
+def about(request) -> HttpResponse:
+    return render(request, "pages/about.html", {})
 
 
-def location_list(request):
+@login_required
+def location_list(request) -> HttpResponse:
     locations = Location.objects.all()
     return render(request, "pages/location_list.html", {"locations": locations})
 
 
-def location_detail(request, slug):
+@login_required
+def location_detail(request, slug) -> HttpResponse:
     location = get_object_or_404(Location, slug=slug)
     return render(request, "pages/location_detail.html", {"location": location})
+
+
+@login_required
+def location_edit(request, slug) -> HttpResponse:
+    location = get_object_or_404(Location, slug=slug)
+    if request.method == "POST":
+        form = LocationForm(request.POST, instance=location)
+        if form.is_valid():
+            form.save()
+            return redirect("location_detail", slug=location.slug)
+    else:
+        form = LocationForm(instance=location)
+    return render(request, "pages/location_edit.html", {"form": form, "location": location})
