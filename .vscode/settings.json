@@ -1,0 +1,9 @@
+{
+  "conventionalCommits.scopes": [
+    "Users",
+    "Docker",
+    "Core",
+    "CI",
+    "Location"
+  ]
+}
