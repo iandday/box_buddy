@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h2>{{ box.name }}</h2>
+      </div>
+      <div class="card-body">
+        <p>
+          <strong>Description:</strong> {{ box.description }}
+        </p>
+        <p>
+          <strong>Created By:</strong> {{ box.created_by }}
+        </p>
+        <p>
+          <strong>Created At:</strong> {{ box.created_at|date:'F j, Y, g:i a' }}
+        </p>
+        <p>
+          <strong>Last Updated By:</strong> {{ box.updated_by }}
+        </p>
+        <p>
+          <strong>Last Updated At:</strong> {{ box.updated_at|date:'F j, Y, g:i a' }}
+        </p>
+      </div>
+      <div class="card-footer text-end"></div>
+      <a href="{% url 'box_edit' box.slug %}" class="btn btn-warning">Edit</a>
+      <a href="{% url 'box_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+  </div>
+{% endblock content %}

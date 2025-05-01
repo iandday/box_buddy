@@ -22,12 +22,6 @@
         <p>
           <strong>Last Updated At:</strong> {{ location.updated_at|date:'F j, Y, g:i a' }}
         </p>
-        <p>
-          <strong>Active:</strong> {{ location.is_active|yesno:'Yes,No' }}
-        </p>
-        <p>
-          <strong>Deleted:</strong> {{ location.is_deleted|yesno:'Yes,No' }}
-        </p>
       </div>
       <div class="card-footer text-end"></div>
       <a href="{% url 'location_edit' location.slug %}"

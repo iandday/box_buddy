@@ -4,6 +4,7 @@
     "Docker",
     "Core",
     "CI",
-    "Location"
+    "Location",
+    "Box"
   ]
 }
