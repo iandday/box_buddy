@@ -33,9 +33,7 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -49,12 +47,15 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",  # https://github.com/django-crispy-forms/crispy-bootstrap5
     "csp",
     "django_bootstrap5",
+    "allauth_ui",
     "allauth",
     "allauth.account",
     "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.openid_connect",
+    "widget_tweaks",
+    "slippers",
     "django_celery_beat",
     "debug_toolbar",
     "health_check",
@@ -99,6 +100,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "box_buddy.context_processors.site_vars",
             ],
         },
     },
@@ -210,14 +212,16 @@ CSP_STYLE_SRC = ("'self'",)
 CSP_STYLE_SRC_ELEM = ("'self'", "cdn.jsdelivr.net")
 CSP_FONT_SRC = ("'self'", "cdn.jsdelivr.net")
 CSP_SCRIPT_SRC = "'self'"
-CSP_SCRIPT_SRC_ELEM = ("'self'", "cdn.jsdelivr.net")
+CSP_SCRIPT_SRC_ELEM = ("'self'", "cdn.jsdelivr.net", "code.jquery.com")
 CSP_CONNECT_SRC = "'self'"
 CSP_INCLUDE_NONCE_IN = [
     "script-src",
     "script-src-elem",
 ]
 
-
+## EMAIL
+EMAIL_HOST = env.str("DJANGO_EMAIL_HOST")
+EMAIL_PORT = env.int("DJANGO_EMAIL_PORT")
 ###########
 # django-allauth
 # https://docs.allauth.org/en/latest/account/configuration.html
@@ -266,8 +270,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 # django debug toolbar
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "host.docker.internal"]
-hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "host.docker.internal", "localhost"]
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostbyname(""))
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda request: env.bool("DJANGO_DEBUG", False),
@@ -279,7 +283,6 @@ DEBUG_TOOLBAR_CONFIG = {
     ],
     "SHOW_TEMPLATE_CONTEXT": True,
 }
-
 
 # celery
 REDIS_URL = env.str("CELERY_REDIS")

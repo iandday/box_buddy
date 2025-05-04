@@ -19,6 +19,11 @@ def about(request) -> HttpResponse:
 
 
 @login_required
+def settings(request) -> HttpResponse:
+    return render(request, "pages/settings.html", {})
+
+
+@login_required
 def location_list(request) -> HttpResponse:
     locations = Location.objects.all()
     return render(request, "list/location_list.html", {"locations": locations})

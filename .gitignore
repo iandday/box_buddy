@@ -12,7 +12,7 @@ db.sqlite3
 *.log
 media/
 /**/static/*
-tailwindcss
+tailwindcss-extra
 
 # Docker
 *.pid

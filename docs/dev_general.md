@@ -28,3 +28,6 @@ The custom Django command will delete all objects created by the `generate_fake_
 ```bash
 uv run manage.py delete_fake_data
 ```
+
+
+https://github.com/dobicinaitis/tailwind-cli-extra
