@@ -1,0 +1,11 @@
+http:
+  routers:
+    django:
+      rule: "Host(`localhost`)"
+      service: django
+      tls: {}
+  services:
+    django:
+      loadBalancer:
+        servers:
+        - url: http://host.docker.internal:8000
