@@ -2,7 +2,16 @@
 set shell := ["bash", "-c"]
 
 
+css:
+    @echo "Watching and rebuilding CSS"
+    ./tailwindcss-extra -i box_buddy/static/css/input.css -o box_buddy/static/css/output.css --watch
+
+dev:
+    @echo "Starting django server"
+    uv run manage.py runserver_plus
+
 up:
+    @echo "Starting docker containers
     docker compose up --watch
 
 rebuild:
@@ -13,22 +22,24 @@ rebuild:
 mkdocs:
     uv run mkdocs serve
 
-# Run linting using Ruff
+
 lint:
-    @echo "Running Ruff linter..."
+    @echo "Running Ruff linter"
     uv run ruff check .
 
-# Format code using Black
+
 format:
     @echo "Formatting code with Ruff"
     uv run ruff format
 
+
+
+pre-commit:
+    @echo "Running pre-commit hooks..."
+    uv run pre-commit run --all-files
 #------
 
-# Run the Django development server
-dev:
-    @echo "Starting the Django development server..."
-    uvicorn box_buddy.asgi:application --reload --host 0.0.0.0 --port 8000
+
 
 # Run tests using pytest
 test:
@@ -69,8 +80,3 @@ docker-clean:
 install:
     @echo "Installing dependencies..."
     pip install -r requirements.txt
-
-# Run pre-commit hooks
-pre-commit:
-    @echo "Running pre-commit hooks..."
-    pre-commit run --all-files

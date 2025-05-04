@@ -12,6 +12,7 @@ db.sqlite3
 *.log
 media/
 /**/static/*
+tailwindcss
 
 # Docker
 *.pid
@@ -19,6 +20,7 @@ media/
 *.pid.lock
 docker-compose.override.yml
 persist/
+
 # Virtual environments
 venv/
 .env/
