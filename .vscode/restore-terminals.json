@@ -1,0 +1,37 @@
+{
+  "artificialDelayMilliseconds": 700,
+  "keepExistingTerminalsOpen": true,
+  "runOnStartup": true,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "commands": [
+            "just up"
+          ],
+          "name": "DockerStack"
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "commands": [
+            "just dev"
+          ],
+          "name": "DjangoServer"
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "commands": [
+            "just css"
+          ],
+          "name": "CssBuilder"
+        }
+      ]
+    }
+  ]
+}

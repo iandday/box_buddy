@@ -11,7 +11,7 @@ dev:
     uv run manage.py runserver_plus
 
 up:
-    @echo "Starting docker containers
+    @echo "Starting docker containers"
     docker compose up --watch
 
 rebuild:
