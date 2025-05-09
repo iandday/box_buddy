@@ -35,46 +35,54 @@
     {% endblock javascript %}
   </head>
   <body class="bg-base-200">
-    <div class="flex">
-      {% if not is_popup %}
-        {% block nav-sidebar %}
-          {% include "sidebar.html" %}
-        {% endblock nav-sidebar %}
-      {% endif %}
-      <div id="content"
-           class="content-wrapper w-full flex flex-col min-h-screen  main-wrapper transition-all duration-200 ease-in-out">
-        {% block top-navbar %}
+    <div class="drawer lg:drawer-open">
+      <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col">
+        {% block navbar %}
           {% if not is_popup %}
             {% include 'navbar.html' %}
           {% endif %}
-        {% endblock top-navbar %}
-        <div class="flex items-center max-md:p-3 p-5 pb-0 flex-wrap justify-between">
-          {% block breadcrumbs %}
-          {% endblock breadcrumbs %}
-        </div>
-        <div class="main-content h-full max-md:p-3 p-5 pt-2 pb-0">
-          {% block messages %}
-            {% if messages %}
-              <div class="toast z-20 whitespace-normal toast-top toast-end">
-                {% for message in messages %}
-                  <div class="alert alert-info info-content {% if message.tags %}alert-{{ message.tags }} {{ message.tags }}-content{% endif %} shadow-lg mb-2 relative">
-                    <div class="p-1 pe-2">
-                      <span>{{ message|capfirst }}</span>
-                    </div>
-                    <button class="btn btn-xs btn-circle absolute top-2 ltr:right-2 rtl:left-2"
-                            onclick="this.parentElement.remove();">
-                      <i class="fa fa-times"></i>
-                    </button>
-                  {% endfor %}
+        {% endblock navbar %}
+        <div id="content"
+             class="content-wrapper w-full flex flex-col min-h-screen  main-wrapper transition-all duration-200 ease-in-out">
+          <div id="breadcrumbs"
+               class="flex items-center max-md:p-3 p-5 pb-0 flex-wrap justify-between">
+            {% block breadcrumbs %}
+            {% endblock breadcrumbs %}
+          </div>
+          <div id="main-content"
+               class="main-content h-full max-md:p-3 p-5 pt-2 pb-0">
+            {% block messages %}
+              {% if messages %}
+                <div class="toast z-20 whitespace-normal toast-top toast-end">
+                  {% for message in messages %}
+                    <div class="alert alert-info info-content {% if message.tags %}alert-{{ message.tags }} {{ message.tags }}-content{% endif %} shadow-lg mb-2 relative">
+                      <div class="p-1 pe-2">
+                        <span>{{ message|capfirst }}</span>
+                      </div>
+                      <button class="btn btn-xs btn-circle absolute top-2 ltr:right-2 rtl:left-2"
+                              onclick="this.parentElement.remove();">
+                        <i class="fa fa-times"></i>
+                      </button>
+                    {% endfor %}
+                  </div>
                 </div>
-              </div>
-            {% endif %}
-          {% endblock messages %}
-          {% block content %}
-          {% endblock content %}
-          {% block inline_javascript %}
-          {% endblock inline_javascript %}
+              {% endif %}
+            {% endblock messages %}
+            {% block content %}
+            {% endblock content %}
+            {% block inline_javascript %}
+            {% endblock inline_javascript %}
+          </div>
         </div>
+      </div>
+      <div class="drawer-side">
+        <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
+        {% if not is_popup %}
+          {% block nav-sidebar %}
+            {% include "sidebar.html" %}
+          {% endblock nav-sidebar %}
+        {% endif %}
       </div>
     </div>
   </body>
