@@ -207,7 +207,7 @@ CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS")
 
 # CSP
 CSP_DEFAULT_SRC = "'self'"
-CSP_IMG_SRC = ("'self'", "data:")
+CSP_IMG_SRC = ("'self'", "data:", "img.daisyui.com")
 CSP_STYLE_SRC = ("'self'",)
 CSP_STYLE_SRC_ELEM = ("'self'", "cdn.jsdelivr.net")
 CSP_FONT_SRC = ("'self'", "cdn.jsdelivr.net")

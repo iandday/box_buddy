@@ -10,10 +10,12 @@ from core.models import Box
 from core.models import Location
 
 
+@login_required
 def home(request) -> HttpResponse:
     return render(request, "pages/home.html", {})
 
 
+@login_required
 def about(request) -> HttpResponse:
     return render(request, "pages/about.html", {})
 
