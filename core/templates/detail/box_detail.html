@@ -1,31 +1,66 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-  <div class="container mt-5">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        <h2>{{ box.name }}</h2>
-      </div>
-      <div class="card-body">
-        <p>
-          <strong>Description:</strong> {{ box.description }}
-        </p>
-        <p>
-          <strong>Created By:</strong> {{ box.created_by }}
-        </p>
-        <p>
-          <strong>Created At:</strong> {{ box.created_at|date:'F j, Y, g:i a' }}
-        </p>
-        <p>
-          <strong>Last Updated By:</strong> {{ box.updated_by }}
-        </p>
-        <p>
-          <strong>Last Updated At:</strong> {{ box.updated_at|date:'F j, Y, g:i a' }}
-        </p>
-      </div>
-      <div class="card-footer text-end"></div>
-      <a href="{% url 'box_edit' box.slug %}" class="btn btn-warning">Edit</a>
-      <a href="{% url 'box_list' %}" class="btn btn-secondary">Back to List</a>
+    <div class="container px-5 py-5">
+        <div class="card bg-base-200 w-96" id="box-detail-card">
+            <div class="card-body items-center text-center">
+                <div class="badge badge-xl badge-accent">{{ box.name }}</div>
+                <p>
+                    <strong>Description:</strong> {{ box.description }}
+                </p>
+            </div>
+            <div class="card-actions items-center justify-end">
+                <a href="{% url 'box_edit' box.slug %}" class="btn btn-warning">Edit</a>
+                <!-- Trigger for modal -->
+                <button class="btn btn-error" id="show-modal">Delete</button>
+                <a href="{% url 'box_list' %}" class="btn btn-secondary">Back to List</a>
+            </div>
+            <div class="card-footer flex flex-col gap-2 items-start px-6 py-4 rounded-b-box">
+                <div class="flex items-center gap-2 text-xs text-base-content/60">
+                    <i class="fa fa-square-plus"></i>
+                    <span>
+                        Created: {{ box.created_at|date:'F j, Y, g:i a' }}
+                        by {{ box.created_by.first_name }} {{ box.created_by.last_name }}
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-base-content/60">
+                    <i class="fa fa-pen-to-square"></i>
+                    <span>
+                        Updated: {{ box.updated_at|date:'F j, Y, g:i a' }}
+                        by {{ box.updated_by }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Confirmation Modal -->
+        {% if items %}
+            <div class="mt-5">
+                <h2 class="text-2xl font-bold mb-4">Items in this Box</h2>
+                <ul class="list-disc pl-5">
+                    {% for item in items %}
+                        <li>
+                            <a href="{% url 'item_detail' item.slug %}" class="link link-primary">{{ item.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="mt-5">
+                <p>No items found in this box.</p>
+            </div>
+        {% endif %}
+        <div id="modal-blocks" class="hidden">
+            {% block modal_title %}
+                "Delete Box"
+            {% endblock modal_title %}
+            {% block modal_content %}
+                <p class="py-4">
+                    Are you sure you want to delete <span class="font-semibold">{{ box.name }}</span>? This action cannot be undone.
+                </p>
+            {% endblock modal_content %}
+            {% block modal_post_url %}
+                {% url 'box_delete' box.slug %}
+            {% endblock modal_post_url %}
+        </div>
     </div>
-  </div>
 {% endblock content %}

@@ -37,6 +37,21 @@ format:
 pre-commit:
     @echo "Running pre-commit hooks..."
     uv run pre-commit run --all-files
+
+# Make migrations
+makemigrations:
+    @echo "Running Django makemigrations..."
+    uv run python manage.py makemigrations
+
+# Run migrations
+migrate:
+    @echo "Running Django migrations..."
+    uv run python manage.py migrate
+
+# Collect static files
+collectstatic:
+    @echo "Collecting static files..."
+    uv run python manage.py collectstatic --noinput
 #------
 
 
@@ -56,20 +71,14 @@ docker-run:
     @echo "Running the Docker container..."
     docker run --rm -it -p 8000:8000 box_buddy
 
-# Run migrations
-migrate:
-    @echo "Running Django migrations..."
-    python manage.py migrate
+
 
 # Create a superuser
 superuser:
     @echo "Creating a Django superuser..."
     python manage.py createsuperuser
 
-# Collect static files
-collect-static:
-    @echo "Collecting static files..."
-    python manage.py collectstatic --noinput
+
 
 # Clean up Docker containers and images
 docker-clean:
