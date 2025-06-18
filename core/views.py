@@ -6,9 +6,8 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 
 from core.forms import BoxForm
-from core.forms import LocationForm
 from core.models import Box
-from core.models import Location
+from core.models import Item
 from users.forms import UserSettingsForm
 from users.models import User
 
@@ -44,56 +43,18 @@ def settings(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def location_list(request: HttpRequest) -> HttpResponse:
-    locations = Location.objects.all()
-    return render(request, "list/location_list.html", {"locations": locations})
-
-
-@login_required
-def location_detail(request: HttpRequest, slug) -> HttpResponse:
-    location = get_object_or_404(Location, slug=slug)
-    return render(request, "detail/location_detail.html", {"location": location})
-
-
-@login_required
-def location_create(request: HttpRequest) -> HttpResponse:
-    if request.method == "POST":
-        form = LocationForm(request.POST)
-        if form.is_valid():
-            form.instance.created_by = request.user
-            location = form.save()
-            return redirect("location_detail", slug=location.slug)
-    else:
-        form = LocationForm()
-    return render(request, "forms/obj_create_edit.html", {"form": form, "title": "Create Location"})
-
-
-@login_required
-def location_edit(request: HttpRequest, slug) -> HttpResponse:
-    location = get_object_or_404(Location, slug=slug)
-    if request.method == "POST":
-        form = LocationForm(request.POST, instance=location)
-        if form.is_valid():
-            form.instance.updated_by = request.user
-            form.save()
-            return redirect("location_detail", slug=location.slug)
-    else:
-        form = LocationForm(instance=location)
-    return render(
-        request, "forms/obj_create_edit.html", {"form": form, "location": location, "title": "Update Location"}
-    )
-
-
-@login_required
 def box_list(request: HttpRequest) -> HttpResponse:
-    boxes = Box.objects.all()
+    boxes = Box.objects.filter(is_active=True, is_deleted=False).order_by("name")
     return render(request, "list/box_list.html", {"boxes": boxes})
 
 
 @login_required
 def box_detail(request: HttpRequest, slug) -> HttpResponse:
     box = get_object_or_404(Box, slug=slug)
-    return render(request, "detail/box_detail.html", {"box": box})
+    box.view_count += 1
+    box.save(update_fields=["view_count"])
+    items = Item.objects.filter(box=box, is_active=True).order_by("name")
+    return render(request, "detail/box_detail.html", {"box": box, "items": items})
 
 
 @login_required
@@ -121,3 +82,13 @@ def box_edit(request: HttpRequest, slug) -> HttpResponse:
     else:
         form = BoxForm(instance=box)
     return render(request, "forms/obj_create_edit.html", {"form": form, "box": box, "title": "Update Box"})
+
+
+@login_required
+def box_delete(request: HttpRequest, slug) -> HttpResponse:
+    box = get_object_or_404(Box, slug=slug)
+    if request.method == "POST":
+        box.is_deleted = True
+        box.save(update_fields=["is_deleted"])
+        return redirect("box_list")
+    return render(request, "forms/obj_delete.html", {"box": box, "title": "Delete Box"})
