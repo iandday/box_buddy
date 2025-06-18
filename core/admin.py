@@ -10,7 +10,7 @@ from .models import Location
 
 
 @admin.register(Location)
-class LocationAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
+class LocationAdmin(SimpleHistoryAdmin, ImportExportModelAdmin):
     list_display = ["name", "slug", "created_by", "created_at", "updated_by", "updated_at", "is_active", "is_deleted"]
     search_fields = ["name", "slug", "description"]
     list_filter = ["is_active", "is_deleted"]
@@ -19,7 +19,7 @@ class LocationAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
 
 
 @admin.register(Box)
-class BoxAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
+class BoxAdmin(SimpleHistoryAdmin, ImportExportModelAdmin):
     list_display = [
         "name",
         "slug",
@@ -38,7 +38,7 @@ class BoxAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
 
 
 @admin.register(Item)
-class ItemAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
+class ItemAdmin(SimpleHistoryAdmin, ImportExportModelAdmin):
     list_display = [
         "name",
         "slug",
@@ -58,7 +58,7 @@ class ItemAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
 
 
 @admin.register(File)
-class FileAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
+class FileAdmin(SimpleHistoryAdmin, ImportExportModelAdmin):
     list_display = [
         "name",
         "slug",
@@ -78,7 +78,7 @@ class FileAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
 
 
 @admin.register(URL)
-class URLAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
+class URLAdmin(SimpleHistoryAdmin, ImportExportModelAdmin):
     list_display = [
         "name",
         "slug",

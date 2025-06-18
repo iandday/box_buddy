@@ -8,7 +8,7 @@ from .models import User
 
 
 @admin.register(User)
-class UserAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
+class UserAdmin(SimpleHistoryAdmin, ImportExportModelAdmin):
     list_display = ["email", "first_name", "last_name", "is_active", "is_admin"]
     search_fields = ["email, first_name", "last_name"]
     list_filter = ["is_active", "is_admin"]
@@ -16,7 +16,7 @@ class UserAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
     list_per_page = 20
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal info", {"fields": ("first_name", "last_name")}),
+        ("Personal info", {"fields": ("first_name", "last_name", "photo")}),
         ("Permissions", {"fields": ("is_active", "is_admin")}),
     )
     add_fieldsets = (

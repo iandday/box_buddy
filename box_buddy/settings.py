@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = env.bool("DJANGO_DEBUG", False)  # type: ignore[arg-type]
 
 # HTTPS redirect
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -44,9 +44,8 @@ INSTALLED_APPS = [
     "django_extensions",
     "django.forms",
     "crispy_forms",
-    "crispy_bootstrap5",  # https://github.com/django-crispy-forms/crispy-bootstrap5
+    "crispy_daisyui",
     "csp",
-    "django_bootstrap5",
     "allauth_ui",
     "allauth",
     "allauth.account",
@@ -133,14 +132,14 @@ LOGGING = {
     },
     "handlers": {
         "console": {
-            "level": env.str("DJANGO_LOG_LEVEL", "INFO"),
+            "level": env.str("DJANGO_LOG_LEVEL", "INFO"),  # type: ignore[arg-type]
             "class": "logging.StreamHandler",
             "formatter": "verbose" if env.bool("DEV") else "json",
         },
     },
     "root": {
         "handlers": ["console"],
-        "level": env.str("DJANGO_LOG_LEVEL", "INFO"),
+        "level": env.str("DJANGO_LOG_LEVEL", "INFO"),  # type: ignore[arg-type]
     },
 }
 
@@ -225,10 +224,10 @@ EMAIL_PORT = env.int("DJANGO_EMAIL_PORT")
 ###########
 # django-allauth
 # https://docs.allauth.org/en/latest/account/configuration.html
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)  # type: ignore[arg-type]
 ACCOUNT_ALLOW_SOCIAL_REGISTRATION = env.bool(
     "DJANGO_ACCOUNT_ALLOW_SOCIAL_REGISTRATION",
-    True,
+    True,  # type: ignore[arg-type]
 )
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
@@ -259,22 +258,23 @@ SOCIALACCOUNT_PROVIDERS = {
 ADMIN_URL = "admin/"
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
 # Force the `admin` sign in process to go through the `django-allauth` workflow
-DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", default=False)
+DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", default=False)  # type: ignore[arg-type]
 
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = "bootstrap5"
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "daisyui"
+CRISPY_TEMPLATE_PACK = "daisyui"
+
 
 # django debug toolbar
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "host.docker.internal", "localhost"]
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostbyname(""))
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": lambda request: env.bool("DJANGO_DEBUG", False),
+    "SHOW_TOOLBAR_CALLBACK": lambda request: env.bool("DJANGO_DEBUG", False),  # type: ignore[arg-type]
     "DISABLE_PANELS": [
         "debug_toolbar.panels.redirects.RedirectsPanel",
         # Disable profiling panel due to an issue with Python 3.12:

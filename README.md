@@ -94,6 +94,7 @@ Box Buddy is designed to keep track of storage box contents, maintaining a paren
 - [ ] Item Edit View
 - [ ] API
 - [ ] Data Import/Export
+- [ ] User Profile phots via object storage and django-fineuploader
 
 
 See the [open issues](https://github.com/iandday/box_buddy/issues) for a full list of proposed features (and known issues).

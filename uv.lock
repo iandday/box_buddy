@@ -96,11 +96,13 @@ dependencies = [
     { name = "argon2-cffi" },
     { name = "celery" },
     { name = "crispy-bootstrap5" },
+    { name = "crispy-daisyui" },
     { name = "django" },
     { name = "django-allauth", extra = ["mfa", "openid", "socialaccount"] },
     { name = "django-allauth-ui" },
     { name = "django-bootstrap5" },
     { name = "django-celery-beat" },
+    { name = "django-crispy-forms" },
     { name = "django-csp" },
     { name = "django-environ" },
     { name = "django-health-check" },
@@ -153,11 +155,13 @@ requires-dist = [
     { name = "argon2-cffi", specifier = "==23.1.0" },
     { name = "celery", specifier = "==5.4.0" },
     { name = "crispy-bootstrap5", specifier = "==2024.10" },
+    { name = "crispy-daisyui", specifier = ">=0.7.0" },
     { name = "django", specifier = ">=5.1.6,<5.2" },
     { name = "django-allauth", extras = ["socialaccount", "mfa", "openid"], specifier = "==65.5.0" },
     { name = "django-allauth-ui", specifier = ">=1.7.1" },
     { name = "django-bootstrap5", specifier = "==25.1" },
     { name = "django-celery-beat", specifier = "==2.7.0" },
+    { name = "django-crispy-forms", specifier = ">=2.3" },
     { name = "django-csp", specifier = "==3.8" },
     { name = "django-environ", specifier = ">=0.12.0,<0.13" },
     { name = "django-health-check", specifier = ">=3.18.3" },
@@ -419,6 +423,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/04/9f/28326c4d35062fdb4ed228c555525da482bbb408cb1c2665a932a5a19880/crispy_bootstrap5-2024.10.tar.gz", hash = "sha256:55b442fe675dd95ad280123c7fe464f454186e90b8e5642e751f436c87627c44", size = 23645 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bf/3f/bc3bdbda8a6acc1d6b89b63ddd8b82a55a27b5828742716fefca0384e3be/crispy_bootstrap5-2024.10-py3-none-any.whl", hash = "sha256:59e91dac5e45a8c954af3fbcaa6804cd5aef4402f027af2f99a352b096c4016f", size = 24454 },
+]
+
+[[package]]
+name = "crispy-daisyui"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "django-crispy-forms" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ef/3a/78d9d81882790f2fe0d6148ba3c23fb61e857e4dfd3a6d388bebef180972/crispy_daisyui-0.7.0.tar.gz", hash = "sha256:dad4e713b1b321f69985c10793cb08442281d385c6615cf02d85fb5fb720a093", size = 16148 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/48/a7/a38fcd79707c85e4b90b655c435c76bd216e016f70509c0aa2d97c5e67f0/crispy_daisyui-0.7.0-py3-none-any.whl", hash = "sha256:8215212202095879c38a368d06f9332d0a3aa1c89e9448930bcd1b4ec99b321f", size = 26911 },
 ]
 
 [[package]]

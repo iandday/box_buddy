@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -8,37 +9,54 @@ from core.forms import BoxForm
 from core.forms import LocationForm
 from core.models import Box
 from core.models import Location
+from users.forms import UserSettingsForm
+from users.models import User
 
 
 @login_required
-def home(request) -> HttpResponse:
+def home(request: HttpRequest) -> HttpResponse:
     return render(request, "pages/home.html", {})
 
 
 @login_required
-def about(request) -> HttpResponse:
+def about(request: HttpRequest) -> HttpResponse:
     return render(request, "pages/about.html", {})
 
 
 @login_required
-def settings(request) -> HttpResponse:
-    return render(request, "pages/settings.html", {})
+def settings(request: HttpRequest) -> HttpResponse:
+    # get user instance
+    if request.method == "GET":
+        user = User.objects.get(id=request.user.pk)
+        form = UserSettingsForm(instance=user)
+        return render(request, "pages/settings.html", {"user": user, "form": form})
+        # render settings page with user instance
+    if request.method == "POST":
+        user = User.objects.get(id=request.user.pk)
+        form = UserSettingsForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            # update request user instance
+            request.user = form.instance
+        # redirect to settings page with updated user instance
+        return redirect("settings")
+    return render(request, "pages/settings.html", {"user": request.user})
 
 
 @login_required
-def location_list(request) -> HttpResponse:
+def location_list(request: HttpRequest) -> HttpResponse:
     locations = Location.objects.all()
     return render(request, "list/location_list.html", {"locations": locations})
 
 
 @login_required
-def location_detail(request, slug) -> HttpResponse:
+def location_detail(request: HttpRequest, slug) -> HttpResponse:
     location = get_object_or_404(Location, slug=slug)
     return render(request, "detail/location_detail.html", {"location": location})
 
 
 @login_required
-def location_create(request) -> HttpResponse:
+def location_create(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = LocationForm(request.POST)
         if form.is_valid():
@@ -51,7 +69,7 @@ def location_create(request) -> HttpResponse:
 
 
 @login_required
-def location_edit(request, slug) -> HttpResponse:
+def location_edit(request: HttpRequest, slug) -> HttpResponse:
     location = get_object_or_404(Location, slug=slug)
     if request.method == "POST":
         form = LocationForm(request.POST, instance=location)
@@ -67,19 +85,19 @@ def location_edit(request, slug) -> HttpResponse:
 
 
 @login_required
-def box_list(request) -> HttpResponse:
+def box_list(request: HttpRequest) -> HttpResponse:
     boxes = Box.objects.all()
     return render(request, "list/box_list.html", {"boxes": boxes})
 
 
 @login_required
-def box_detail(request, slug) -> HttpResponse:
+def box_detail(request: HttpRequest, slug) -> HttpResponse:
     box = get_object_or_404(Box, slug=slug)
     return render(request, "detail/box_detail.html", {"box": box})
 
 
 @login_required
-def box_create(request) -> HttpResponse:
+def box_create(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = BoxForm(request.POST)
         if form.is_valid():
@@ -92,7 +110,7 @@ def box_create(request) -> HttpResponse:
 
 
 @login_required
-def box_edit(request, slug) -> HttpResponse:
+def box_edit(request: HttpRequest, slug) -> HttpResponse:
     box = get_object_or_404(Box, slug=slug)
     if request.method == "POST":
         form = BoxForm(request.POST, instance=box)
