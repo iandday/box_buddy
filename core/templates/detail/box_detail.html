@@ -1,19 +1,37 @@
-{% extends "base.html" %}
+{% extends "components/base.html" %}
 
 {% block content %}
     <div class="container px-5 py-5">
-        <div class="card bg-base-200 w-96" id="box-detail-card">
+        <div class="card bg-base-300 w-96 rounded-xl rounded-box shadow-xl"
+             id="box-detail-card">
             <div class="card-body items-center text-center">
-                <div class="badge badge-xl badge-accent">{{ box.name }}</div>
+                <h2 class="card-title">{{ box.name }}</h2>
                 <p>
                     <strong>Description:</strong> {{ box.description }}
                 </p>
+                {% if box.parent %}
+                    <p>
+                        <strong>Parent Box:</strong> <a href="{% url 'box_detail' box.parent.slug %}">{{ box.parent.name }}</a>
+                    </p>
+                {% else %}
+                    <p>
+                        <strong>Parent Box:</strong> None
+                    </p>
+                {% endif %}
             </div>
-            <div class="card-actions items-center justify-end">
-                <a href="{% url 'box_edit' box.slug %}" class="btn btn-warning">Edit</a>
+            <div class="card-actions items-center justify-between px-4">
+                <a href="{% url 'box_edit' box.slug %}" class="btn btn-info">
+                    <i class="fa fa-pen-to-square"></i>
+                    <span class="ml-2">Edit</span></a>
                 <!-- Trigger for modal -->
-                <button class="btn btn-error" id="show-modal">Delete</button>
-                <a href="{% url 'box_list' %}" class="btn btn-secondary">Back to List</a>
+                <button class="btn btn-error" id="show-delete-modal">
+                    <i class="fa fa-trash"></i>
+                    <span class="ml-2">Delete</span>
+                </button>
+                <a href="{% url 'box_list' %}" class="btn btn-info">
+                    <i class="fa fa-backward-step"></i>
+                    <span class="ml-2">Back</span>
+                </a>
             </div>
             <div class="card-footer flex flex-col gap-2 items-start px-6 py-4 rounded-b-box">
                 <div class="flex items-center gap-2 text-xs text-base-content/60">
@@ -49,18 +67,9 @@
                 <p>No items found in this box.</p>
             </div>
         {% endif %}
-        <div id="modal-blocks" class="hidden">
-            {% block modal_title %}
-                "Delete Box"
-            {% endblock modal_title %}
-            {% block modal_content %}
-                <p class="py-4">
-                    Are you sure you want to delete <span class="font-semibold">{{ box.name }}</span>? This action cannot be undone.
-                </p>
-            {% endblock modal_content %}
-            {% block modal_post_url %}
-                {% url 'box_delete' box.slug %}
-            {% endblock modal_post_url %}
-        </div>
+        {% url 'box_delete' box.slug as action %}
+
+        {% include "components/modal_delete.html" with title="Delete Box" action=action name=box.name type="box" %}
+
     </div>
 {% endblock content %}

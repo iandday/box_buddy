@@ -37,39 +37,16 @@
 
                 {% include "components/navbar.html" with site_title=site_title logo=logo %}
 
-                {% block content %}
-                {% endblock content %}
-                <dialog id="modal" class="modal">
-                    <div class="modal-box">
-                        <form method="dialog">
-                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                        </form>
-                        <h3 class="font-bold text-lg">
-                            {% block modal_title %}
-                            {% endblock modal_title %}
-                        </h3>
-                        {% block modal_content %}
-                        {% endblock modal_content %}
-                        <div class="modal-action">
-                            <form method="post"
-                                  action="{% block modal_post_url %} {% endblock modal_post_url %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-error">Yes, Delete</button>
-                            </div>
-                        </form>
-                    </div>
-                </dialog>
+                <div class="base-100">
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+
+                {% include "components/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
+
             </div>
-
-            {% include "components/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
-
         </div>
+        {% block extra_content %}
+        {% endblock extra_content %}
     </body>
-    <!-- Footer Scripts-->
-    <script nonce="{{ request.csp_nonce }}">
-      // Show modal on click
-      document.getElementById('show-modal').onclick = function() {
-        document.getElementById('modal').showModal()
-      };
-    </script>
 </html>
