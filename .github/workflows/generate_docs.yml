@@ -1,6 +1,5 @@
 name: Generate Documentation
-description: |
-  This workflow generates the documentation using MkDocs and deploys it to GitHub Pages.
+
 on:
   push:
     branches:
@@ -36,4 +35,4 @@ jobs:
             mkdocs-material-${{ env.cache_id }}
             mkdocs-material-
       - name: Publish to GitHub Pages
-        run: uv run --all-groups --inexect mkdocs gh-deploy --force
+        run: uv run --all-groups --inexact mkdocs gh-deploy --force
