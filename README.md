@@ -32,12 +32,7 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
+    <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -48,7 +43,7 @@
 
 ## About The Project
 
-[![Box Buddy Screen Shot][product-screenshot]](https://example.com)
+<!-- [![Box Buddy Screen Shot][product-screenshot]](https://example.com) -->
 
 
 Box Buddy is designed to keep track of storage box contents, maintaining a parent/child relationship.  A box can be anything from a plastic tote, a shelf, or an entire room.
@@ -58,34 +53,10 @@ Box Buddy is designed to keep track of storage box contents, maintaining a paren
 
 
 
-### Built With
-
-* ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
-* ![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
-* ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-* ![Celery](https://img.shields.io/badge/celery-%23a9cc54.svg?style=for-the-badge&logo=celery&logoColor=ddf4a4)
-* ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
-* ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-* ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
-
-* ![Dependabot](https://img.shields.io/badge/dependabot-025E8C?style=for-the-badge&logo=dependabot&logoColor=white)
-* [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-
-
-
 
 ## Roadmap
 
 - [x] Data Models
-- [x] Location List View
-- [x] Location Detail View
-- [x] Location Edit View
 - [ ] Box List View
 - [ ] Box Detail View
 - [ ] Box Edit View
