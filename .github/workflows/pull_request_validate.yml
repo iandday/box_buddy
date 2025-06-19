@@ -44,4 +44,4 @@ jobs:
             mkdocs-material-${{ env.cache_id }}
             mkdocs-material-
       - name: Build Documentation
-        run: uv run --only-group doc  --inexect mkdocs build
+        run: uv run --only-group doc  --inexact mkdocs build
