@@ -101,6 +101,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "box_buddy.context_processors.site_vars",
             ],
+            "builtins": ["slippers.templatetags.slippers"],
         },
     },
 ]

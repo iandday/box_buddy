@@ -20,7 +20,7 @@ rebuild:
 
 # view rendered mkdocs
 mkdocs:
-    uv run mkdocs serve
+    uv run mkdocs serve -a localhost:8001
 
 
 lint:

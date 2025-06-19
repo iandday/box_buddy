@@ -41,11 +41,12 @@ class Box(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(User, related_name="updated_by_box", on_delete=models.CASCADE, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
-    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.PROTECT, related_name="children")
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="children")
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     favorite = models.BooleanField(default=False)
     view_count = models.IntegerField(default=0)
+    fake = models.BooleanField(default=False, help_text="Used for testing purposes")
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
 
@@ -98,6 +99,7 @@ class Item(models.Model):
     description = models.TextField(blank=True)
     quantity = models.IntegerField(default=1)
     box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name="box", null=True, blank=True)
+    fake = models.BooleanField(default=False, help_text="Used for testing purposes")
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
 
@@ -146,7 +148,8 @@ class File(models.Model):
     description = models.TextField(blank=True)
     file = models.FileField(upload_to="files/")
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="item_file")
-    box = models.ForeignKey(Box, on_delete=models.PROTECT, related_name="box_file", null=True, blank=True)
+    box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name="box_file", null=True, blank=True)
+    fake = models.BooleanField(default=False, help_text="Used for testing purposes")
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
 
@@ -194,6 +197,7 @@ class URL(models.Model):
     url = models.URLField()
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="item_url", null=True, blank=True)
     box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name="box_url", null=True, blank=True)
+    fake = models.BooleanField(default=False, help_text="Used for testing purposes")
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
 

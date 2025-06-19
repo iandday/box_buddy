@@ -2,10 +2,11 @@
 
 ## Service URLS
 
+* App: [https://localhost](https://localhost)
 * Traefik Portal: [https://traefik.localhost](https://traefik.localhost)
 * Mailpit Interface: [https://mail.localhost](https://mail.localhost)
 * Flower Admin: [https://flower.localhost](https://flower.localhost)
-* App: [https://localhost](https://localhost)
+* Local Documentation: [http://localhost:8001/](http://localhost:8001/)
 
 ## Generate Fake Data for Testing
 
@@ -28,6 +29,3 @@ The custom Django command will delete all objects created by the `generate_fake_
 ```bash
 uv run manage.py delete_fake_data
 ```
-
-
-https://github.com/dobicinaitis/tailwind-cli-extra
