@@ -15,7 +15,9 @@
         </label>
     </div>
     <!-- Navbar title -->
-    <div class="mx-2 flex-1 px-2">{{ site_title }}</div>
+    <div class="mx-2 flex-1 px-2">
+        <a href={% url 'home' %}>{{ site_title }}</a>
+    </div>
     <!-- Desktop menu, hidden on small screens -->
     <div class="hidden lg:block">
         <ul class="menu menu-horizontal  px-1">

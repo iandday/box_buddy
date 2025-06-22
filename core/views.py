@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,13 @@ from users.models import User
 
 @login_required
 def home(request: HttpRequest) -> HttpResponse:
-    return render(request, "pages/home.html", {})
+    parents = (
+        Box.objects.filter(is_active=True, is_deleted=False, parent=None)
+        .annotate(child_count=Count("children"))
+        .order_by("-view_count")
+    )
+
+    return render(request, "pages/home.html", {"parents": parents})
 
 
 @login_required
@@ -44,8 +51,13 @@ def settings(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def box_list(request: HttpRequest) -> HttpResponse:
-    boxes = Box.objects.filter(is_active=True, is_deleted=False).order_by("name")
-    return render(request, "list/box_list.html", {"boxes": boxes})
+    if parent_slug := request.GET.get("parent"):
+        parent = get_object_or_404(Box, slug=parent_slug, is_active=True, is_deleted=False)
+        boxes = Box.objects.filter(is_active=True, is_deleted=False, parent=parent).order_by("name")
+    else:
+        boxes = Box.objects.filter(is_active=True, is_deleted=False).order_by("name")
+        parent = None
+    return render(request, "list/box_list.html", {"boxes": boxes, "parent": parent})
 
 
 @login_required
