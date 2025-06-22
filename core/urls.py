@@ -11,4 +11,7 @@ urlpatterns = [
     path("box/create/", views.box_create, name="box_create"),
     path("box/edit/<slug:slug>/", views.box_edit, name="box_edit"),
     path("box/delete/<slug:slug>/", views.box_delete, name="box_delete"),
+    path("item/", views.item_list, name="item_list"),
+    path("item/view/<slug:slug>/", views.item_detail, name="item_detail"),
+    path("item/edit/<slug:slug>/", views.item_edit, name="item_edit"),
 ]

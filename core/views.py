@@ -7,7 +7,10 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 
 from core.forms import BoxForm
+from core.forms import ItemForm
+from core.models import URL
 from core.models import Box
+from core.models import File
 from core.models import Item
 from users.forms import UserSettingsForm
 from users.models import User
@@ -66,7 +69,8 @@ def box_detail(request: HttpRequest, slug) -> HttpResponse:
     box.view_count += 1
     box.save(update_fields=["view_count"])
     items = Item.objects.filter(box=box, is_active=True).order_by("name")
-    return render(request, "detail/box_detail.html", {"box": box, "items": items})
+    child_boxes = Box.objects.filter(parent=box, is_active=True, is_deleted=False).order_by("name")
+    return render(request, "detail/box_detail.html", {"box": box, "items": items, "child_boxes": child_boxes})
 
 
 @login_required
@@ -104,3 +108,39 @@ def box_delete(request: HttpRequest, slug) -> HttpResponse:
         box.save(update_fields=["is_deleted"])
         return redirect("box_list")
     return render(request, "forms/obj_delete.html", {"box": box, "title": "Delete Box"})
+
+
+@login_required
+def item_list(request: HttpRequest) -> HttpResponse:
+    items = Item.objects.filter(is_active=True, is_deleted=False).order_by("name")
+    return render(request, "list/item_list.html", {"items": items})
+
+
+@login_required
+def item_detail(request: HttpRequest, slug) -> HttpResponse:
+    item = get_object_or_404(Item, slug=slug)
+    files = File.objects.filter(item=item, is_active=True).order_by("name")
+    urls = URL.objects.filter(item=item, is_active=True).order_by("name")
+    return render(
+        request,
+        "detail/item_detail.html",
+        {
+            "item": item,
+            "files": files,
+            "urls": urls,
+        },
+    )
+
+
+@login_required
+def item_edit(request: HttpRequest, slug) -> HttpResponse:
+    item = get_object_or_404(Item, slug=slug)
+    if request.method == "POST":
+        form = ItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.instance.updated_by = request.user
+            form.save()
+            return redirect("item_detail", slug=item.slug)
+    else:
+        form = BoxForm(instance=item)
+    return render(request, "forms/obj_create_edit.html", {"form": form, "item": item, "title": "Update Item"})
