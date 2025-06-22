@@ -281,6 +281,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="usage.html" class="md-nav__link md-nav__link--active">
         
   
@@ -290,6 +301,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#generate-testing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generate Testing Data
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -380,6 +419,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev_roadmap.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmpap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -407,6 +467,23 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#generate-testing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generate Testing Data
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -421,6 +498,13 @@
 
 
 <h1 id="usage">Usage</h1>
+<h2 id="generate-testing-data">Generate Testing Data</h2>
+<p>Testing data can be generated to demo the application's functionality before entering real data.  Run the command below from the application's container to generate data</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>run<span class="w"> </span>manage.py<span class="w"> </span>generate_fake_data
+</span></code></pre></div>
+<p>The testing data can be removed without effecting any other data with the command below.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv<span class="w"> </span>run<span class="w"> </span>manage.py<span class="w"> </span>delete_fake_data
+</span></code></pre></div>
 
 
 
