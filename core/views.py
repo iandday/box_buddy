@@ -69,7 +69,11 @@ def box_detail(request: HttpRequest, slug) -> HttpResponse:
     box.view_count += 1
     box.save(update_fields=["view_count"])
     items = Item.objects.filter(box=box, is_active=True).order_by("name")
-    child_boxes = Box.objects.filter(parent=box, is_active=True, is_deleted=False).order_by("name")
+    child_boxes = (
+        Box.objects.filter(parent=box, is_active=True, is_deleted=False)
+        .annotate(item_count=Count("item_box"))
+        .order_by("name")
+    )
     return render(request, "detail/box_detail.html", {"box": box, "items": items, "child_boxes": child_boxes})
 
 
@@ -112,7 +116,11 @@ def box_delete(request: HttpRequest, slug) -> HttpResponse:
 
 @login_required
 def item_list(request: HttpRequest) -> HttpResponse:
-    items = Item.objects.filter(is_active=True, is_deleted=False).order_by("name")
+    if box_slug := request.GET.get("box"):
+        box = get_object_or_404(Box, slug=box_slug, is_active=True, is_deleted=False)
+        items = Item.objects.filter(box=box, is_active=True, is_deleted=False).order_by("name")
+    else:
+        items = Item.objects.filter(is_active=True, is_deleted=False).order_by("name")
     return render(request, "list/item_list.html", {"items": items})
 
 
@@ -144,3 +152,16 @@ def item_edit(request: HttpRequest, slug) -> HttpResponse:
     else:
         form = BoxForm(instance=item)
     return render(request, "forms/obj_create_edit.html", {"form": form, "item": item, "title": "Update Item"})
+
+
+@login_required
+def item_create(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.instance.created_by = request.user
+            item = form.save()
+            return redirect("item_detail", slug=item.slug)
+    else:
+        form = ItemForm()
+    return render(request, "forms/obj_create_edit.html", {"form": form, "title": "Create Item"})
