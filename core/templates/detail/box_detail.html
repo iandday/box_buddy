@@ -16,10 +16,6 @@
                             <a class="link link-primary"
                                href="{% url 'box_detail' box.parent.slug %}">{{ box.parent.name }}</a>
                         </p>
-                    {% else %}
-                        <p>
-                            <strong>Parent Box:</strong> None
-                        </p>
                     {% endif %}
                 </div>
                 <div class="card-actions items-center justify-between px-4">
@@ -48,6 +44,7 @@
                             <i class="fa fa-backward-step"></i>
                             <span class="ml-2">Back</span>
                         </a>
+                        <button class="btn btn-xs btn-secondary ml-2">Move Box</button>
                     </div>
                     <div class=" flex flex-col gap-2 items-start px-6 py-4 rounded-b-box">
                         <div class="flex items-center gap-2 text-xs text-base-content/60">
