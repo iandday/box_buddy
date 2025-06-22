@@ -1,0 +1,52 @@
+{% load static i18n %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" data-theme="light">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+            {% block title %}
+            {% endblock title %}
+        </title>
+        <meta name="description" content="Home storage management" />
+        <meta name="author" content="Ian Day" />
+        <meta name="keywords"
+              content="storage, home organization, inventory, boxes, locations, management" />
+        <link rel="icon" href="{% static 'images/favicon.png' %}" />
+        {% block css %}
+            <link href="{% static 'css/output.css' %}" rel="stylesheet" type="text/css" />
+            <link rel="stylesheet"
+                  href="{% static 'fonts/fontawesome-free-6.6.0-web/css/all.min.css' %}" />
+        {% endblock css %}
+        {% block javascript %}
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                    crossorigin="anonymous"></script>
+            <script nonce="{{request.csp_nonce}}" src="{% static 'js/load_theme.js' %}"></script>
+            <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"
+                    integrity="sha384-9l0HtvnB08o05/gpJ0/s/MH6b4qnQsdwaxyvtOJY/j8yiQWS1kAmsRQVMgKxcREb"
+                    crossorigin="anonymous"></script>
+        {% endblock javascript %}
+    </head>
+    <body>
+        <div class="drawer">
+            <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content flex flex-col">
+
+                {% include "layout/navbar.html" with site_title=site_title logo=logo %}
+
+                <div class="base-100">
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+            </div>
+
+            {% include "layout/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
+
+        </div>
+        {% block extra_content %}
+        {% endblock extra_content %}
+    </body>
+</html>

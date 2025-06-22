@@ -1,0 +1,26 @@
+serversTransport:
+  insecureSkipVerify: true
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: web-secure
+          scheme: https
+  web-secure:
+    address: ":443"
+log:
+  level: DEBUG
+  filePath: "/etc/traefik/logs/traefik.log"
+accessLog:
+  filePath: "/etc/traefik/logs/access.log"
+api:
+  dashboard: true
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: true
+  file:
+    filename: /etc/traefik/routes.yml
+    watch: true

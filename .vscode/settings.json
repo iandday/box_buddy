@@ -5,6 +5,12 @@
     "Core",
     "CI",
     "Location",
-    "Box"
+    "Box",
+    "Item"
+  ],
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "file": "./.vscode/daisyui.md"
+    }
   ]
 }

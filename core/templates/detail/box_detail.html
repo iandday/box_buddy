@@ -1,31 +1,125 @@
-{% extends 'base.html' %}
+{% extends "layout/base.html" %}
 
 {% block content %}
-  <div class="container mt-5">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        <h2>{{ box.name }}</h2>
-      </div>
-      <div class="card-body">
-        <p>
-          <strong>Description:</strong> {{ box.description }}
-        </p>
-        <p>
-          <strong>Created By:</strong> {{ box.created_by }}
-        </p>
-        <p>
-          <strong>Created At:</strong> {{ box.created_at|date:'F j, Y, g:i a' }}
-        </p>
-        <p>
-          <strong>Last Updated By:</strong> {{ box.updated_by }}
-        </p>
-        <p>
-          <strong>Last Updated At:</strong> {{ box.updated_at|date:'F j, Y, g:i a' }}
-        </p>
-      </div>
-      <div class="card-footer text-end"></div>
-      <a href="{% url 'box_edit' box.slug %}" class="btn btn-warning">Edit</a>
-      <a href="{% url 'box_list' %}" class="btn btn-secondary">Back to List</a>
+    <div class="container px-5 py-5">
+        <div class="flex flex-row px-2 justify-between items-center">
+            <div class="card bg-base-300 w-96 rounded-box shadow-xl"
+                 id="box-detail-card">
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title">{{ box.name }}</h2>
+                    <p>
+                        <strong>Description:</strong> {{ box.description }}
+                    </p>
+                    {% if box.parent %}
+                        <p>
+                            <strong>Parent Box:</strong>
+                            <a class="link link-primary"
+                               href="{% url 'box_detail' box.parent.slug %}">{{ box.parent.name }}</a>
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="card-actions items-center justify-between px-4">
+                    <div>
+                        <a href="{% url 'item_create' %}{% querystring box=box.slug %}"
+                           class="btn btn-primary">
+                            <i class="fa fa-plus"></i>
+                            <span class="ml-2">Add Item</span>
+                        </a>
+                        <a href="{% url 'box_create' %}{% querystring parent=box.slug %}"
+                           class="btn btn-primary">
+                            <i class="fa fa-plus"></i>
+                            <span class="ml-2">Add Box</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{% url 'box_edit' box.slug %}" class="btn btn-info">
+                            <i class="fa fa-pen-to-square"></i>
+                            <span class="ml-2">Edit</span></a>
+                        <!-- Trigger for modal -->
+                        <button class="btn btn-error" id="show-delete-modal">
+                            <i class="fa fa-trash"></i>
+                            <span class="ml-2">Delete</span>
+                        </button>
+                        <a href="{% url 'box_list' %}" class="btn btn-info">
+                            <i class="fa fa-backward-step"></i>
+                            <span class="ml-2">Back</span>
+                        </a>
+                        <button class="btn btn-xs btn-secondary ml-2">Move Box</button>
+                    </div>
+                    <div class=" flex flex-col gap-2 items-start px-6 py-4 rounded-b-box">
+                        <div class="flex items-center gap-2 text-xs text-base-content/60">
+                            <i class="fa fa-square-plus"></i>
+                            <span>
+                                Created: {{ box.created_at|date:'F j, Y, g:i a' }}
+                                by {{ box.created_by.first_name }} {{ box.created_by.last_name }}
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-base-content/60">
+                            <i class="fa fa-pen-to-square"></i>
+                            <span>
+                                Updated: {{ box.updated_at|date:'F j, Y, g:i a' }}
+                                by {{ box.updated_by }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="child-boxes" class="mt-10">
+                {% if child_boxes %}
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-10 ">
+                        {% for child_box in child_boxes %}
+                            <div class="card card-xs bg-base-300 rounded-box">
+                                <div class="card-body p-4 items-center">
+                                    <h2 class="card-title text-accent">
+                                        <a href="{% url "box_detail" child_box.slug %}"
+                                           class="link link-primary">{{ child_box.name }}</a>
+                                    </h2>
+                                    <div class="card-actions flex flex-row gap-2" id="child-box-actions">
+                                        <a href="{% url 'box_list' %}{% querystring parent=child_box.slug %}"
+                                           class="link link-primary ml-2">
+                                            <span class="badge badge-accent badge-md flex items-center gap-1 whitespace-nowrap">
+                                                <i class="fa fa-cubes"></i>
+                                                {{ child_box.children.all|length }}
+                                            </span>
+                                        </a>
+                                        <a href="{% url 'item_list' %}{% querystring box=child_box.slug %}"
+                                           class="link link-primary ml-2">
+                                            <span class="badge badge-accent flex items-center gap-1 whitespace-nowrap">
+                                                <i class="fa fa-list "></i>
+                                                {{ child_box.item_count }}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="mt-5">
+                        <p>No child boxes found.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if box.items.all %}
+            <div class="mt-5">
+                <h2 class="text-2xl font-bold mb-4">Items in this Box</h2>
+                <ul class="list-disc pl-5">
+                    {% for item in box.items.all %}
+                        <li>
+                            <a href="{% url 'item_detail' item.slug %}" class="link link-primary">{{ item.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="mt-5">
+                <p>No items found in this box.</p>
+            </div>
+        {% endif %}
+        {% url 'box_delete' box.slug as action %}
+
+        {% include "components/modal_delete.html" with title="Delete Box" action=action name=box.name type="box" %}
+
     </div>
-  </div>
 {% endblock content %}

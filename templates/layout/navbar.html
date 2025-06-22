@@ -1,0 +1,55 @@
+{% load static i18n %}
+
+<div class="navbar bg-base-300 w-full">
+    <!-- Hamburger menu button for small screens -->
+    <div class="flex-none lg:hidden">
+        <label for="my-drawer-3"
+               aria-label="open sidebar"
+               class="btn btn-square btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 class="inline-block h-6 w-6 stroke-current">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </label>
+    </div>
+    <!-- Navbar title -->
+    <div class="mx-2 flex-1 px-2">
+        <a href={% url 'home' %}>{{ site_title }}</a>
+    </div>
+    <!-- Desktop menu, hidden on small screens -->
+    <div class="hidden lg:block">
+        <ul class="menu menu-horizontal  px-1">
+            {% for entry in sidebar_data_links %}
+                <li>
+                    {% url entry.view_name as url %}
+                    <a class="{% if url in request.path|urlencode %} active {% endif %}"
+                       href="{{ url }}">
+                        <i class="fa {{ entry.icon }}"></i>{{ entry.text }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                <div class="w-10 rounded-full">
+                    <img alt="User Profile" src="{{ user.photo.url }}" height="25" width="25" />
+                </div>
+            </div>
+            <ul tabindex="0"
+                class="menu menu-sm dropdown-content bg-base-300 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                <li>{{ user.first_name }} {{ user.last_name }}</li>
+                {% for entry in sidebar_app_links %}
+                    <li>
+                        {% url entry.view_name as url %}
+                        <a class="{% if url in request.path|urlencode %} active {% endif %}"
+                           href="{{ url }}">
+                            <i class="fa {{ entry.icon }}"></i>{{ entry.text }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+    <div class="container px-5 py-5">
+        <div class="card bg-base-300 w-96 rounded-xl rounded-box shadow-xl"
+             id="item-detail-card">
+            <div class="card-body items-center text-center">
+                <h2 class="card-title">{{ item.name }}</h2>
+                <p>
+                    <strong>Description:</strong> {{ item.description }}
+                </p>
+                <p>
+                    <strong>Quantity:</strong> {{ item.quantity }}
+                </p>
+                {% if item.box %}
+                    <p>
+                        <strong>Box:</strong>
+                        <a href="{% url 'box_detail' item.box.slug %}" class="link link-primary">{{ item.box.name }}</a>
+                    </p>
+                {% else %}
+                    <p>
+                        <strong>Box:</strong> None
+                    </p>
+                {% endif %}
+            </div>
+            <div class="card-actions items-center justify-between px-4">
+                <a href="{% url 'item_edit' item.slug %}" class="btn btn-info">
+                    <i class="fa fa-pen-to-square"></i>
+                    <span class="ml-2">Edit</span>
+                </a>
+                <!-- Trigger for modal -->
+                <button class="btn btn-error" id="show-delete-modal">
+                    <i class="fa fa-trash"></i>
+                    <span class="ml-2">Delete</span>
+                </button>
+                <a href="{% url 'item_list' %}" class="btn btn-info">
+                    <i class="fa fa-backward-step"></i>
+                    <span class="ml-2">Back</span>
+                </a>
+            </div>
+            <div class="card-footer flex flex-col gap-2 items-start px-6 py-4 rounded-b-box">
+                <div class="flex items-center gap-2 text-xs text-base-content/60">
+                    <i class="fa fa-square-plus"></i>
+                    <span>
+                        Created: {{ item.created_at|date:'F j, Y, g:i a' }}
+                        by {{ item.created_by.first_name }} {{ item.created_by.last_name }}
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-base-content/60">
+                    <i class="fa fa-pen-to-square"></i>
+                    <span>
+                        Updated: {{ item.updated_at|date:'F j, Y, g:i a' }}
+                        by {{ item.updated_by }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Confirmation Modal -->
+        {% url 'item_delete' item.slug as action %}
+
+        {% include "components/modal_delete.html" with title="Delete Item" action=action name=item.name type="item" %}
+
+        {% if files %}
+            <div class="mt-5">
+                <h2 class="text-2xl font-bold mb-4">Files for this Item</h2>
+                <ul class="list bg-base-100 rounded-box shadow-md">
+                    {% for file in files %}
+                        <li class="list-row flex items-center gap-4">
+                            <div>
+                                <i class="fa fa-file"></i>
+                            </div>
+                            <div>
+                                <a href="{{ file.file.url }}" class="link link-primary" target="_blank">{{ file.name }}</a>
+                                <div class="text-xs opacity-60">{{ file.description }}</div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="mt-5">
+                <p>No files found for this item.</p>
+            </div>
+        {% endif %}
+        {% if urls %}
+            <div class="mt-5">
+                <h2 class="text-2xl font-bold mb-4">Links for this Item</h2>
+                <ul class="list bg-base-100 rounded-box shadow-md">
+                    {% for url in urls %}
+                        <li class="list-row flex items-center gap-4">
+                            <div>
+                                <i class="fa fa-link"></i>
+                            </div>
+                            <div>
+                                <a href="{{ url.url }}" class="link link-primary" target="_blank">{{ url.name }}</a>
+                                <div class="text-xs opacity-60">{{ url.description }}</div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="mt-5">
+                <p>No links found for this item.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

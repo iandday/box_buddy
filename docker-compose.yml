@@ -3,6 +3,8 @@ services:
   postgres:
     image: postgres:17.4
     container_name: postgres
+    ports:
+      - "5432:5432"
     volumes:
       - ./persist/postgres:/var/lib/postgresql/data
     env_file:
@@ -22,24 +24,14 @@ services:
   redis:
     image: docker.io/redis:7
     container_name: redis
+    ports:
+      - "6379:6379"
     volumes:
       - ./persist/redis:/data
     labels:
       - "traefik.enable=false"
   traefik:
     image: traefik:v3.3
-    command:
-      - "--providers.docker"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web-secure.address=:443"
-      - "--entrypoints.web.http.redirections.entryPoint.to=web-secure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-      - "--api=true"
-      - "--log.level=INFO"
-      - "--log.filePath=/etc/traefik/logs/traefik.log"
-      - "--accesslog=true"
-      - "--accesslog.filePath=/etc/traefik/logs/access.log"
     container_name: traefik
     ports:
       - 80:80
@@ -47,160 +39,164 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./persist/logs/traefik:/etc/traefik/logs
+      - ./docker/traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./docker/traefik/routes.yml:/etc/traefik/routes.yml
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=web-secure"
       - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.service=api@internal"
-  celery_worker:
-    container_name: celery_worker
-    build:
-      dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: .
-          target: /app
-          ignore:
-            - .venv/
-            - ./mypy_cache/
-            - ./pytest_cache/
-            - .ruff_cache/
-            - .vscode
-        - action: rebuild
-          path: ./uv.lock
-    volumes:
-      - ./persist/static:/app_static
-      - ./persist/media:/app_media
-    environment:
-      - CONTAINER_ROLE=worker
-    env_file:
-      - ./box_buddy/.env
-    healthcheck:
-      test: ["CMD", "uv", "run", "manage.py", "health_check"]
-      interval: 60s
-      timeout: 6s
-      start_period: 20s
-      retries: 3
-    labels:
-      - "traefik.enable=false"
-    depends_on:
-      server:
-        condition: service_started
-  celery_beat:
-    container_name: celery_beat
-    build:
-      dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: .
-          target: /app
-          ignore:
-            - .venv/
-            - ./mypy_cache/
-            - ./pytest_cache/
-            - .ruff_cache/
-            - .vscode
-        - action: rebuild
-          path: ./uv.lock
-    volumes:
-      - ./persist/static:/app_static
-      - ./persist/media:/app_media
-    environment:
-      - CONTAINER_ROLE=beats
-    env_file:
-      - ./box_buddy/.env
-    healthcheck:
-      test: ["CMD", "uv", "run", "manage.py", "health_check"]
-      interval: 60s
-      timeout: 6s
-      start_period: 20s
-      retries: 3
-    labels:
-      - "traefik.enable=false"
-    depends_on:
-      server:
-        condition: service_started
-  celery_flower:
-    container_name: celery_flower
-    build:
-      dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: .
-          target: /app
-          ignore:
-            - .venv/
-            - ./mypy_cache/
-            - ./pytest_cache/
-            - .ruff_cache/
-            - .vscode
-        - action: rebuild
-          path: ./uv.lock
-    volumes:
-      - ./persist/static:/app_static
-      - ./persist/media:/app_media
-    environment:
-      - CONTAINER_ROLE=flower
-    env_file:
-      - ./box_buddy/.env
-    healthcheck:
-      test: ["CMD", "uv", "run", "manage.py", "health_check"]
-      interval: 60s
-      timeout: 6s
-      start_period: 20s
-      retries: 3
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.flower.rule=Host(`flower.localhost`)"
-      - "traefik.http.routers.flower.tls=true"
-      - "traefik.http.services.flower.loadbalancer.server.port=5555"
-    depends_on:
-      celery_beat:
-        condition: service_healthy
-      celery_worker:
-        condition: service_healthy
-  server:
-    container_name: server
-    build:
-      dockerfile: ./docker/django/Dockerfile
-    develop:
-      watch:
-        - action: sync+restart
-          path: .
-          target: /app
-          ignore:
-            - .venv/
-            - ./mypy_cache/
-            - ./pytest_cache/
-            - .ruff_cache/
-            - .vscode
-        - action: rebuild
-          path: ./uv.lock
-    volumes:
-      - ./persist/static:/app_static
-      - ./persist/media:/app_media
-    environment:
-      - CONTAINER_ROLE=server
-      - CHOKIDAR_USEPOLLING=1
-    env_file:
-      - ./box_buddy/.env
-    healthcheck:
-      test: ["CMD", "uv", "run", "manage.py", "health_check"]
-      interval: 60s
-      timeout: 6s
-      start_period: 20s
-      retries: 3
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`localhost`)"
-      - "traefik.http.routers.django.tls=true"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
-    depends_on:
-      - redis
-      - postgres
-      - mailpit
-      - traefik
+  # celery_worker:
+  #   container_name: celery_worker
+  #   build:
+  #     dockerfile: ./docker/django/Dockerfile
+  #   develop:
+  #     watch:
+  #       - action: sync
+  #         path: .
+  #         target: /app
+  #         ignore:
+  #           - .venv/
+  #           - ./mypy_cache/
+  #           - ./pytest_cache/
+  #           - .ruff_cache/
+  #           - .vscode
+  #       - action: rebuild
+  #         path: ./uv.lock
+  #   volumes:
+  #     - ./persist/static:/app_static
+  #     - ./persist/media:/app_media
+  #   environment:
+  #     - CONTAINER_ROLE=worker
+  #   env_file:
+  #     - ./box_buddy/.env
+  #   healthcheck:
+  #     test: ["CMD", "uv", "run", "manage.py", "health_check"]
+  #     interval: 60s
+  #     timeout: 6s
+  #     start_period: 20s
+  #     retries: 3
+  #   labels:
+  #     - "traefik.enable=false"
+  #   depends_on:
+  #     server:
+  #       condition: service_started
+  # celery_beat:
+  #   container_name: celery_beat
+  #   build:
+  #     dockerfile: ./docker/django/Dockerfile
+  #   develop:
+  #     watch:
+  #       - action: sync
+  #         path: .
+  #         target: /app
+  #         ignore:
+  #           - .venv/
+  #           - ./mypy_cache/
+  #           - ./pytest_cache/
+  #           - .ruff_cache/
+  #           - .vscode
+  #       - action: rebuild
+  #         path: ./uv.lock
+  #   volumes:
+  #     - ./persist/static:/app_static
+  #     - ./persist/media:/app_media
+  #   environment:
+  #     - CONTAINER_ROLE=beats
+  #   env_file:
+  #     - ./box_buddy/.env
+  #   healthcheck:
+  #     test: ["CMD", "uv", "run", "manage.py", "health_check"]
+  #     interval: 60s
+  #     timeout: 6s
+  #     start_period: 20s
+  #     retries: 3
+  #   labels:
+  #     - "traefik.enable=false"
+  #   depends_on:
+  #     server:
+  #       condition: service_started
+  # celery_flower:
+  #   container_name: celery_flower
+  #   build:
+  #     dockerfile: ./docker/django/Dockerfile
+  #   develop:
+  #     watch:
+  #       - action: sync
+  #         path: .
+  #         target: /app
+  #         ignore:
+  #           - .venv/
+  #           - ./mypy_cache/
+  #           - ./pytest_cache/
+  #           - .ruff_cache/
+  #           - .vscode
+  #       - action: rebuild
+  #         path: ./uv.lock
+  #   volumes:
+  #     - ./persist/static:/app_static
+  #     - ./persist/media:/app_media
+  #   environment:
+  #     - CONTAINER_ROLE=flower
+  #   env_file:
+  #     - ./box_buddy/.env
+  #   healthcheck:
+  #     test: ["CMD", "uv", "run", "manage.py", "health_check"]
+  #     interval: 60s
+  #     timeout: 6s
+  #     start_period: 20s
+  #     retries: 3
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.flower.rule=Host(`flower.localhost`)"
+  #     - "traefik.http.routers.flower.tls=true"
+  #     - "traefik.http.services.flower.loadbalancer.server.port=5555"
+  #   depends_on:
+  #     celery_beat:
+  #       condition: service_healthy
+  #     celery_worker:
+  #       condition: service_healthy
+  # server:
+  #   container_name: server
+  #   build:
+  #     dockerfile: ./docker/django/Dockerfile
+  #   develop:
+  #     watch:
+  #       - action: sync+restart
+  #         path: .
+  #         target: /app
+  #         ignore:
+  #           - .venv/
+  #           - ./mypy_cache/
+  #           - ./pytest_cache/
+  #           - .ruff_cache/
+  #           - .vscode
+  #       - action: rebuild
+  #         path: ./uv.lock
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./persist/static:/app_static
+  #     - ./persist/media:/app_media
+  #   environment:
+  #     - CONTAINER_ROLE=server
+  #     - CHOKIDAR_USEPOLLING=1
+  #   env_file:
+  #     - ./box_buddy/.env
+  #   healthcheck:
+  #     test: ["CMD", "uv", "run", "manage.py", "health_check"]
+  #     interval: 60s
+  #     timeout: 6s
+  #     start_period: 20s
+  #     retries: 3
+  #   # labels:
+  #   #   - "traefik.enable=true"
+  #   #   - "traefik.http.routers.django.rule=Host(`localhost`)"
+  #   #   - "traefik.http.routers.django.tls=true"
+  #   #   - "traefik.http.services.django.loadbalancer.server.port=8000"
+  #   depends_on:
+  #     - redis
+  #     - postgres
+  #     - mailpit
+      #- traefik

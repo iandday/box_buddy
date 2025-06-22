@@ -2,7 +2,16 @@
 set shell := ["bash", "-c"]
 
 
+css:
+    @echo "Watching and rebuilding CSS"
+    ./tailwindcss-extra -i box_buddy/static/css/input.css -o box_buddy/static/css/output.css --watch
+
+dev:
+    @echo "Starting django server"
+    uv run manage.py runserver_plus
+
 up:
+    @echo "Starting docker containers"
     docker compose up --watch
 
 rebuild:
@@ -11,24 +20,41 @@ rebuild:
 
 # view rendered mkdocs
 mkdocs:
-    uv run mkdocs serve
+    uv run mkdocs serve -a localhost:8001
 
-# Run linting using Ruff
+
 lint:
-    @echo "Running Ruff linter..."
+    @echo "Running Ruff linter"
     uv run ruff check .
 
-# Format code using Black
+
 format:
     @echo "Formatting code with Ruff"
     uv run ruff format
 
+
+
+pre-commit:
+    @echo "Running pre-commit hooks..."
+    uv run pre-commit run --all-files
+
+# Make migrations
+makemigrations:
+    @echo "Running Django makemigrations..."
+    uv run python manage.py makemigrations
+
+# Run migrations
+migrate:
+    @echo "Running Django migrations..."
+    uv run python manage.py migrate
+
+# Collect static files
+collectstatic:
+    @echo "Collecting static files..."
+    uv run python manage.py collectstatic --noinput
 #------
 
-# Run the Django development server
-dev:
-    @echo "Starting the Django development server..."
-    uvicorn box_buddy.asgi:application --reload --host 0.0.0.0 --port 8000
+
 
 # Run tests using pytest
 test:
@@ -45,20 +71,14 @@ docker-run:
     @echo "Running the Docker container..."
     docker run --rm -it -p 8000:8000 box_buddy
 
-# Run migrations
-migrate:
-    @echo "Running Django migrations..."
-    python manage.py migrate
+
 
 # Create a superuser
 superuser:
     @echo "Creating a Django superuser..."
     python manage.py createsuperuser
 
-# Collect static files
-collect-static:
-    @echo "Collecting static files..."
-    python manage.py collectstatic --noinput
+
 
 # Clean up Docker containers and images
 docker-clean:
@@ -69,8 +89,3 @@ docker-clean:
 install:
     @echo "Installing dependencies..."
     pip install -r requirements.txt
-
-# Run pre-commit hooks
-pre-commit:
-    @echo "Running pre-commit hooks..."
-    pre-commit run --all-files

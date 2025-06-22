@@ -1,0 +1,38 @@
+<dialog id="modal" class="modal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <h3 class="font-bold text-lg text-center">{{ title }}</h3>
+        <div class="flex flex-col justify-center pt-4 mb-4">
+            <div>
+                <p class=" text-center">
+                    Are you sure you want to delete the <span class="font-extrabold">{{ name }}</span> {{ type }}?
+                </p>
+                <p class="py-4 text-center">This action cannot be undone.</p>
+            </div>
+        </div>
+        <div class="modal-action">
+            <div class="flex flex-row" id="delete-confirmation">
+                <form method="post" action="{{ action }}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-error">
+                        <i class="fa fa-trash"></i>
+                        <span class="ml-2">Yes, Delete</span>
+                    </button>
+                </div>
+            </form>
+            <form method="dialog">
+                <button class="btn btn-primary">
+                    <i class="fa fa-rotate-left"></i>
+                    <span class="ml-2">Cancel</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</dialog>
+<script nonce="{{ request.csp_nonce }}">
+  document.getElementById('show-delete-modal').onclick = function() {
+    document.getElementById('modal').showModal()
+  };
+</script>
