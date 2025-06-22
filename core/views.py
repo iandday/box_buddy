@@ -20,7 +20,7 @@ from users.models import User
 def home(request: HttpRequest) -> HttpResponse:
     parents = (
         Box.objects.filter(is_active=True, is_deleted=False, parent=None)
-        .annotate(child_count=Count("children"))
+        .annotate(item_count=Count("items"))
         .order_by("-view_count")
     )
 
@@ -68,13 +68,13 @@ def box_detail(request: HttpRequest, slug) -> HttpResponse:
     box = get_object_or_404(Box, slug=slug)
     box.view_count += 1
     box.save(update_fields=["view_count"])
-    items = Item.objects.filter(box=box, is_active=True).order_by("name")
+
     child_boxes = (
         Box.objects.filter(parent=box, is_active=True, is_deleted=False)
-        .annotate(item_count=Count("item_box"))
+        .annotate(item_count=Count("items"))
         .order_by("name")
     )
-    return render(request, "detail/box_detail.html", {"box": box, "items": items, "child_boxes": child_boxes})
+    return render(request, "detail/box_detail.html", {"box": box, "child_boxes": child_boxes})
 
 
 @login_required

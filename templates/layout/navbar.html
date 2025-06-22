@@ -21,26 +21,15 @@
     <!-- Desktop menu, hidden on small screens -->
     <div class="hidden lg:block">
         <ul class="menu menu-horizontal  px-1">
-            <!-- Navbar menu content here -->
-            <li>
-                <a>Navbar Item 1</a>
-            </li>
-            <li>
-                <details>
-                    <summary>Data</summary>
-                    <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        {% for entry in sidebar_data_links %}
-                            <li>
-                                {% url entry.view_name as url %}
-                                <a class="{% if url in request.path|urlencode %} active {% endif %}"
-                                   href="{{ url }}">
-                                    <i class="fa {{ entry.icon }}"></i>{{ entry.text }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </details>
-            </li>
+            {% for entry in sidebar_data_links %}
+                <li>
+                    {% url entry.view_name as url %}
+                    <a class="{% if url in request.path|urlencode %} active {% endif %}"
+                       href="{{ url }}">
+                        <i class="fa {{ entry.icon }}"></i>{{ entry.text }}
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
         <div class="dropdown dropdown-end">
             <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">

@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = "Generate fake data for all models and link them together"
 
-    def handle(self, *args, **kwargs):
+    def handle(self, *args, **kwargs):  # noqa: C901
         fake = Faker()
 
         user = User.objects.get(email=os.environ["DJANGO_SUPERUSER_EMAIL"])
@@ -734,32 +734,66 @@ class Command(BaseCommand):
             ],
         }
         for parent_name, children in boxes.items():
-            parent_box = Box.objects.create(
+            parent_box, _ = Box.objects.get_or_create(
                 name=parent_name,
-                description=fake.text(max_nb_chars=200),
-                is_active=True,
-                is_deleted=False,
-                created_by=user,
+                defaults={
+                    "description": fake.text(max_nb_chars=200),
+                    "is_active": True,
+                    "is_deleted": False,
+                    "created_by": user,
+                },
             )
             for child in children:
                 for child_name, items in child.items():
-                    child_box = Box.objects.create(
+                    child_box, _ = Box.objects.get_or_create(
                         name=child_name,
-                        description=fake.text(max_nb_chars=200),
-                        is_active=True,
-                        is_deleted=False,
                         parent=parent_box,
-                        created_by=user,
+                        defaults={
+                            "description": fake.text(max_nb_chars=200),
+                            "is_active": True,
+                            "is_deleted": False,
+                            "created_by": user,
+                        },
                     )
                     for item_name in items:
-                        Item.objects.create(
+                        Item.objects.get_or_create(
                             name=item_name,
-                            description=fake.text(max_nb_chars=100),
                             box=child_box,
-                            is_active=True,
-                            is_deleted=False,
-                            created_by=user,
+                            defaults={
+                                "description": fake.text(max_nb_chars=100),
+                                "is_active": True,
+                                "is_deleted": False,
+                                "created_by": user,
+                                "quantity": random.randint(1, 10),  # noqa: S311
+                            },
                         )
+                    # create box under child box
+                    for x in range(1, 4):
+                        Box.objects.get_or_create(
+                            name=f"{child_name} Box {x}",
+                            parent=child_box,
+                            defaults={
+                                "description": fake.text(max_nb_chars=200),
+                                "is_active": True,
+                                "is_deleted": False,
+                                "created_by": user,
+                            },
+                        )
+
+            # create 3 items for each parent box
+            for x in range(1, 4):
+                Item.objects.get_or_create(
+                    name=f"{parent_name} Item {x}",
+                    box=parent_box,
+                    defaults={
+                        "description": fake.text(max_nb_chars=100),
+                        "is_active": True,
+                        "is_deleted": False,
+                        "created_by": user,
+                        "quantity": random.randint(1, 10),  # noqa: S311
+                    },
+                )
+        # Create files for each box
         # Create files for each item
         items = Item.objects.all()
         for item in items:

@@ -2,7 +2,7 @@
 
 <div class="drawer-side">
     <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div class="flex flex-col justify-between w-64   bg-base-100">
+    <div class="flex flex-col justify-between w-64   bg-base-300">
         <div class="flex flex-col flex-1" id="sidebar-content">
             <div class="flex items-center justify-center py-6" id="sidebar-header">
                 <a href="{% url 'home' %}" class="flex items-center gap-2">
@@ -11,7 +11,7 @@
             </div>
             <div class="flex flex-col" id="sidebar-links">
                 <div class="divider text-base-content/40 menu-title divider-start">Data</div>
-                <ul class="menu menu-sm bg-base-100 rounded-box z-1 w-full p-2 shadow">
+                <ul class="menu menu-sm bg-base-300 rounded-box z-1 w-full p-2 shadow">
                     {% for entry in sidebar_data_links %}
                         <li>
                             {% url entry.view_name as url %}
@@ -23,7 +23,7 @@
                     {% endfor %}
                 </ul>
                 <div class="divider text-base-content/40 menu-title divider-start">App</div>
-                <ul class="menu menu-sm bg-base-100 rounded-box z-1 w-full p-2 shadow">
+                <ul class="menu menu-sm bg-base-300 rounded-box z-1 w-full p-2 shadow">
                     {% for entry in sidebar_app_links %}
                         <li>
                             {% url entry.view_name as url %}

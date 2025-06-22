@@ -98,7 +98,7 @@ class Item(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     quantity = models.IntegerField(default=1)
-    box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name="item_box", null=True, blank=True)
+    box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name="items", null=True, blank=True)
     fake = models.BooleanField(default=False, help_text="Used for testing purposes")
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)

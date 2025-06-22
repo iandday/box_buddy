@@ -41,10 +41,10 @@
                     {% block content %}
                     {% endblock content %}
                 </div>
-
-                {% include "layout/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
-
             </div>
+
+            {% include "layout/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
+
         </div>
         {% block extra_content %}
         {% endblock extra_content %}

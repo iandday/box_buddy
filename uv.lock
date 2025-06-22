@@ -118,7 +118,6 @@ dependencies = [
     { name = "python-json-logger" },
     { name = "python-slugify" },
     { name = "redis" },
-    { name = "slippers" },
     { name = "werkzeug" },
     { name = "whitenoise" },
 ]
@@ -175,7 +174,6 @@ requires-dist = [
     { name = "python-json-logger", specifier = ">=3.3.0" },
     { name = "python-slugify", specifier = "==8.0.4" },
     { name = "redis", specifier = "==5.2.1" },
-    { name = "slippers", specifier = ">=0.6.2" },
     { name = "werkzeug", specifier = ">=3.1,<3.2" },
     { name = "whitenoise", specifier = ">=6.9.0,<6.10" },
 ]
