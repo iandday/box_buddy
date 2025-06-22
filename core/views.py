@@ -85,9 +85,28 @@ def box_create(request: HttpRequest) -> HttpResponse:
             form.instance.created_by = request.user
             box = form.save()
             return redirect("box_detail", slug=box.slug)
+    elif parent_slug := request.GET.get("parent"):
+        parent = get_object_or_404(Box, slug=parent_slug, is_active=True, is_deleted=False)
+        form = BoxForm(initial={"parent": parent})
     else:
         form = BoxForm()
     return render(request, "forms/obj_create_edit.html", {"form": form, "title": "Create Box"})
+
+
+@login_required
+def item_create(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.instance.created_by = request.user
+            item = form.save()
+            return redirect("item_detail", slug=item.slug)
+    elif box_slug := request.GET.get("box"):
+        box = get_object_or_404(Box, slug=box_slug, is_active=True, is_deleted=False)
+        form = ItemForm(initial={"box": box})
+    else:
+        form = ItemForm()
+    return render(request, "forms/obj_create_edit.html", {"form": form, "title": "Create Item"})
 
 
 @login_required
@@ -152,16 +171,3 @@ def item_edit(request: HttpRequest, slug) -> HttpResponse:
     else:
         form = BoxForm(instance=item)
     return render(request, "forms/obj_create_edit.html", {"form": form, "item": item, "title": "Update Item"})
-
-
-@login_required
-def item_create(request: HttpRequest) -> HttpResponse:
-    if request.method == "POST":
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            form.instance.created_by = request.user
-            item = form.save()
-            return redirect("item_detail", slug=item.slug)
-    else:
-        form = ItemForm()
-    return render(request, "forms/obj_create_edit.html", {"form": form, "title": "Create Item"})

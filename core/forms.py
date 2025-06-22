@@ -9,7 +9,7 @@ from core.models import Item
 class BoxForm(forms.ModelForm):
     class Meta:
         model = Box
-        fields = ["name", "description"]
+        fields = ["name", "description", "parent"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,7 +25,7 @@ class BoxForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ["name", "description"]
+        fields = ["name", "description", "box", "quantity"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
