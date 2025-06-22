@@ -1,4 +1,4 @@
-{% extends "components/base.html" %}
+{% extends "layout/base.html" %}
 
 {% block content %}
     <div class="flex flex-col items-center pt-4">
@@ -10,11 +10,14 @@
                         <h2 class="card-title text-base">
                             <a href="{% url "box_detail" x.slug %}" class="link link-primary">{{ x.name }}</a>
                         </h2>
-                        <a href="{% url "box_list" %}{% querystring parent=x.slug %}">
-                            <div class="btn">
-                                Boxes
-                                <div class="badge badge-sm badge-secondary">{{ x.child_count }}</div>
-                            </div>
+                        <a class="btn"
+                           href="{% url "box_list" %}{% querystring parent=x.slug %}">
+                            Boxes
+                            <div class="badge badge-sm badge-secondary">{{ x.children.all|length }}</div>
+                        </a>
+                        <a class="btn" href="{% url "item_list" %}{% querystring box=x.slug %}">
+                            Items
+                            <div class="badge badge-sm badge-secondary">{{ x.item_count }}</div>
                         </a>
                     </div>
                 </div>

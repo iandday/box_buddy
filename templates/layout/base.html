@@ -35,14 +35,14 @@
             <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content flex flex-col">
 
-                {% include "components/navbar.html" with site_title=site_title logo=logo %}
+                {% include "layout/navbar.html" with site_title=site_title logo=logo %}
 
                 <div class="base-100">
                     {% block content %}
                     {% endblock content %}
                 </div>
 
-                {% include "components/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
+                {% include "layout/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
 
             </div>
         </div>
