@@ -30,23 +30,21 @@
                     crossorigin="anonymous"></script>
         {% endblock javascript %}
     </head>
-    <body>
-        <div class="drawer">
-            <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
-            <div class="drawer-content flex flex-col">
+    <body class="drawer bg-base-200 lg:drawer-open min-h-screen">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        <main class="drawer-content">
+            <div class="grid grid-cols-12 grid-rows-[min-content] gap-y-12 p-4 lg:gap-x-12 lg:p-10">
 
                 {% include "layout/navbar.html" with site_title=site_title logo=logo %}
 
-                <div class="base-100">
-                    {% block content %}
-                    {% endblock content %}
-                </div>
+                {% block content %}
+                {% endblock content %}
+                {% block extra_content %}
+                {% endblock extra_content %}
             </div>
+        </main>
 
-            {% include "layout/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
+        {% include "layout/sidebar.html" with sidebar_view_links=sidebar_view_links app_list=app_list logo=logo site_title=site_title %}
 
-        </div>
-        {% block extra_content %}
-        {% endblock extra_content %}
     </body>
 </html>
