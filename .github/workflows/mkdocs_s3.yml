@@ -33,6 +33,7 @@ jobs:
           restore-keys: |
             mkdocs-material-${{ env.cache_id }}
             mkdocs-material-
+      - run: uv run --all-groups --inexact mkdocs build
       - name: Setup AWS CLI
         uses: aws-actions/configure-aws-credentials@v4.2.1
         with:
